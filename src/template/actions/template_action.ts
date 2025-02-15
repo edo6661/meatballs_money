@@ -1,7 +1,7 @@
 "use server";
 
 import db from "@/lib/prisma";
-import { templateSchema } from "@/lib/zod/templateSchema";
+import { templateSchema } from "@/lib/zod/template_schema";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 

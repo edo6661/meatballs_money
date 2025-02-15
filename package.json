@@ -7,20 +7,29 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate": "prisma generate",
-    "studio": "prisma studio",
-    "migrate": "prisma migrate dev",
-    "push": "prisma db push --preview-feature"
+    "db:generate": "prisma generate",
+    "db:studio": "prisma studio",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:reset": "prisma migrate reset && prisma migrate dev"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.7.4",
     "@prisma/client": "^6.3.1",
+    "bcryptjs": "^3.0.0",
     "next": "15.1.7",
+    "next-auth": "^5.0.0-beta.25",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "uuid": "^11.0.5",
     "zod": "^3.24.2"
+  },
+  "prisma": {
+    "schema": "prisma/schema.prisma"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
