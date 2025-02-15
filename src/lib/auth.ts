@@ -1,4 +1,3 @@
-import { v4 as uuid } from "uuid";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import GitHub from "next-auth/providers/github";
@@ -8,6 +7,7 @@ import { loginSchema } from "./zod/auth_schema";
 import bcrypt from "bcryptjs";
 import { CREDENTIALS } from "@/constants/auth_contant";
 const adapter = PrismaAdapter(db);
+
 export const { auth, handlers, signIn, signOut } = NextAuth({
   session: {
     strategy: "jwt",
