@@ -4,6 +4,8 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import "../globals.css";
 import Nav from '@/components/header/Nav';
+import { Toaster } from "@/components/ui/sonner"
+
 
 
 type Params = Promise<{ locale: string }>
@@ -29,6 +31,7 @@ export default async function LocaleLayout({
     <html lang={locale}>
       <body>
         <NextIntlClientProvider messages={messages}>
+          <Toaster />
           <Nav />
           {children}
         </NextIntlClientProvider>

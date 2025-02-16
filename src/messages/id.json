@@ -7,19 +7,31 @@
     "about": "Pergi ke tentang halaman"
   },
   "AuthPage": {
-    "title": "Halaman Otorisasi",
-    "login": {
-      "message": "Silakan masuk"
-    },
     "register": {
-      "message": "Daftar"
+      "title": "Registrasi",
+      "name": "Nama",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Konfirmasi Password",
+      "submit": "Daftar"
+    },
+    "login": {
+      "with": {
+        "github": "Masuk dengan Github"
+      },
+      "title": "Login",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Masuk"
     },
     "validation": {
+      "success": "Berhasil mendaftar",
       "name": {
         "min": "Nama harus memiliki setidaknya 3 karakter"
       },
       "email": {
-        "format": "Email tidak valid"
+        "format": "Email tidak valid",
+        "exists": "Email sudah terdaftar."
       },
       "password": {
         "min": "Kata sandi harus memiliki setidaknya 3 karakter"

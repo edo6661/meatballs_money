@@ -7,19 +7,32 @@
     "about": "Go to the about page"
   },
   "AuthPage": {
-    "title": "Authorization Page",
-    "login": {
-      "message": "Login"
-    },
     "register": {
-      "message": "Register"
+      "title": "Register",
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "submit": "Sign Up"
+    },
+    "login": {
+      "with": {
+        "github": "Sign In with Github"
+      },
+      "title": "Login",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign In"
     },
     "validation": {
+      "success": "Successfully registered",
+
       "name": {
         "min": "Name must have at least 3 characters"
       },
       "email": {
-        "format": "Invalid email"
+        "format": "Invalid email",
+        "exists": "Email already exists."
       },
       "password": {
         "min": "Password must have at least 3 characters"

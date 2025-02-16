@@ -42,7 +42,7 @@ export const register = async (
     if (userExist) {
       return {
         formErrors: {
-          email: ["Email sudah terdaftar."],
+          email: [t("email.exists")],
         },
       };
     }
@@ -55,7 +55,7 @@ export const register = async (
       },
     });
     return {
-      message: "Pendaftaran berhasil.",
+      message: t("success"),
     };
   } catch (err) {
     await handleActionError(
