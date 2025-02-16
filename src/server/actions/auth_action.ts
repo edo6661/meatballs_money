@@ -1,48 +1,62 @@
 "use server";
 
+import { SignUpState } from "@/common/action_state";
 import { CREDENTIALS } from "@/constants/auth_contant";
+import { AUTH_VALIDATION } from "@/constants/il8n";
 import { handleActionError } from "@/helper/handle_action_error";
 import { signIn } from "@/lib/auth";
 import db from "@/lib/prisma";
-import { loginSchema, registerSchema } from "@/lib/zod/auth_schema";
+import { getRegisterSchema, loginSchema } from "@/lib/zod/auth_schema";
 import bcrypt from "bcryptjs";
+import { getTranslations } from "next-intl/server";
 import { RedirectType } from "next/dist/client/components/redirect-error";
 import { redirect } from "next/navigation";
 
-export const register = async (formData: FormData) => {
+export const register = async (
+  prevState: SignUpState,
+  formData: FormData
+): Promise<SignUpState> => {
+  const t = await getTranslations(AUTH_VALIDATION);
   const name = formData.get("name");
   const email = formData.get("email");
   const password = formData.get("password");
   const confirmPassword = formData.get("confirmPassword");
 
-  const validation = registerSchema.safeParse({
+  const result = getRegisterSchema(t).safeParse({
     name,
     email,
     password,
     confirmPassword,
   });
 
-  if (!validation.success) {
-    return;
+  if (!result.success) {
+    return {
+      formErrors: result.error.flatten().fieldErrors,
+    };
   }
 
   try {
     const userExist = await db.user.findUnique({
-      where: { email: validation.data.email },
+      where: { email: result.data.email },
     });
     if (userExist) {
-      return;
+      return {
+        formErrors: {
+          email: ["Email sudah terdaftar."],
+        },
+      };
     }
-    const hashedPassword = await bcrypt.hash(validation.data.password, 10);
+    const hashedPassword = await bcrypt.hash(result.data.password, 10);
     await db.user.create({
       data: {
-        email: validation.data.email,
-        name: validation.data.name,
+        email: result.data.email,
+        name: result.data.name,
         password: hashedPassword,
       },
     });
-
-    redirect("/auth/login", RedirectType.replace);
+    return {
+      message: "Pendaftaran berhasil.",
+    };
   } catch (err) {
     await handleActionError(
       err,
@@ -50,7 +64,9 @@ export const register = async (formData: FormData) => {
       "/auth/register",
       "Terjadi kesalahan saat pendaftaran."
     );
-    return;
+    return {
+      error: "Terjadi kesalahan saat pendaftaran.",
+    };
   }
 };
 

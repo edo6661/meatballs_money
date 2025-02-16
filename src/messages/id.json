@@ -1,0 +1,32 @@
+{
+  "HomePage": {
+    "title": "Halo Dunia!",
+    "welcome": {
+      "message": "Selamat datang di halaman utama"
+    },
+    "about": "Pergi ke tentang halaman"
+  },
+  "AuthPage": {
+    "title": "Halaman Otorisasi",
+    "login": {
+      "message": "Silakan masuk"
+    },
+    "register": {
+      "message": "Daftar"
+    },
+    "validation": {
+      "name": {
+        "min": "Nama harus memiliki setidaknya 3 karakter"
+      },
+      "email": {
+        "format": "Email tidak valid"
+      },
+      "password": {
+        "min": "Kata sandi harus memiliki setidaknya 3 karakter"
+      },
+      "confirmPassword": {
+        "match": "Kata sandi tidak cocok"
+      }
+    }
+  }
+}

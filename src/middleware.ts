@@ -1,11 +1,15 @@
 import { auth } from "@/lib/auth";
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-  const session = await auth();
+import createIntlMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
+import { NextRequest, NextResponse } from "next/server";
 
-  // Skip auth check for static files and API routes
+const supportedLocales = ["en", "id"];
+const intlMiddleware = createIntlMiddleware(routing);
+
+export async function middleware(request: NextRequest) {
+  const { pathname, search } = request.nextUrl;
+
+  // Skip static files and API routes
   if (
     pathname.startsWith("/_next/") ||
     pathname.includes(".") ||
@@ -14,29 +18,64 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Protected routes
+  // Handle i18n first
+  const intlResponse = intlMiddleware(request);
+  const response = intlResponse || NextResponse.next();
+
+  // Extract locale from pathname
+  const localeRegex = new RegExp(`^/(${supportedLocales.join("|")})(?=/|$)`);
+  const localeMatch = pathname.match(localeRegex);
+  const locale = localeMatch?.[1];
+
+  // Get path without locale
+  const pathWithoutLocale = pathname.replace(localeRegex, "") || "/";
+
+  // Define protected and auth routes
   const protectedRoutes = ["/"];
   const authRoutes = ["/auth/login", "/auth/register"];
 
-  if (protectedRoutes.includes(pathname) && !session) {
-    return NextResponse.redirect(new URL("/auth/login", request.url));
-  }
+  // Check if current path is protected or auth route
+  const isProtectedRoute = protectedRoutes.some(
+    (route) => pathWithoutLocale === route || pathWithoutLocale === `${route}/`
+  );
+  const isAuthRoute = authRoutes.some(
+    (route) => pathWithoutLocale === route || pathWithoutLocale === `${route}/`
+  );
 
-  if (authRoutes.includes(pathname) && session) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
+  try {
+    // Get session
+    const session = await auth();
 
-  return NextResponse.next();
+    // Handle protected routes - redirect to login if no session
+    if (isProtectedRoute && !session) {
+      const redirectUrl = new URL(
+        `/${locale || "id"}/auth/login${search}`,
+        request.url
+      );
+      return NextResponse.redirect(redirectUrl);
+    }
+
+    // Handle auth routes - redirect to home if has session
+    if (isAuthRoute && session) {
+      const redirectUrl = new URL(`/${locale || "id"}${search}`, request.url);
+      return NextResponse.redirect(redirectUrl);
+    }
+
+    return response;
+  } catch (error) {
+    console.error("Error checking session:", error);
+    // If auth check fails, treat as no session
+    if (isProtectedRoute) {
+      const redirectUrl = new URL(
+        `/${locale || "id"}/auth/login${search}`,
+        request.url
+      );
+      return NextResponse.redirect(redirectUrl);
+    }
+    return response;
+  }
 }
+
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
-  ],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };

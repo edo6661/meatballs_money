@@ -1,0 +1,32 @@
+{
+  "HomePage": {
+    "title": "Hello world!",
+    "welcome": {
+      "message": "Welcome to the homepage"
+    },
+    "about": "Go to the about page"
+  },
+  "AuthPage": {
+    "title": "Authorization Page",
+    "login": {
+      "message": "Login"
+    },
+    "register": {
+      "message": "Register"
+    },
+    "validation": {
+      "name": {
+        "min": "Name must have at least 3 characters"
+      },
+      "email": {
+        "format": "Invalid email"
+      },
+      "password": {
+        "min": "Password must have at least 3 characters"
+      },
+      "confirmPassword": {
+        "match": "Password does not match"
+      }
+    }
+  }
+}

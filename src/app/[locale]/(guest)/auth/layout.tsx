@@ -5,9 +5,5 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <main>
-      {children}
-    </main>
-  );
+  return children;
 }
