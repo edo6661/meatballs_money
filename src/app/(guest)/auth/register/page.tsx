@@ -1,18 +1,11 @@
-import { signUp } from '@/server/actions/auth_action'
+import { register } from '@/server/actions/auth_action'
 import { redirect } from 'next/navigation'
 import React from 'react'
 
 const RegisterPage = () => {
   return (
     <div className='container flex flex-col gap-12'>
-      <form className='flex flex-col' action={async (formData: FormData) => {
-        "use server"
-        const res = await signUp(formData);
-        if (res.success) {
-          redirect('/auth/login')
-        }
-
-      }}>
+      <form className='flex flex-col' action={register}>
         <label htmlFor="name">Name</label>
         <input type="text" name="name" id="name" />
         <label htmlFor="email">Email</label>

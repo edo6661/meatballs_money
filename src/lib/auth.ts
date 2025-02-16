@@ -34,9 +34,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           type: "password",
         },
       },
-      authorize: async (credentials, request) => {
-        console.log("REQUEST AUTHORIZE:", request);
-        console.log("CREDENTIALS AUTHORIZE:", credentials);
+      authorize: async (credentials) => {
         const validatedPayload = loginSchema.parse(credentials);
         const { email, password } = validatedPayload;
 
@@ -46,12 +44,16 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               email,
             },
           });
-          if (!userExist) return null;
+          if (!userExist) {
+            return null;
+          }
           const comparePassword = await bcrypt.compare(
             password,
             userExist.password!
           );
-          if (!comparePassword) return null;
+          if (!comparePassword) {
+            return null;
+          }
           return {
             email: userExist.email,
             name: userExist.name,

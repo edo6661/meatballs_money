@@ -1,6 +1,6 @@
-import { CREDENTIALS, GITHUB } from '@/constants/auth_contant'
+import { GITHUB } from '@/constants/auth_contant'
 import { signIn } from '@/lib/auth'
-import { executeAction } from '@/utils/execute_action'
+import { login } from '@/server/actions/auth_action'
 import { redirect } from 'next/navigation'
 import React from 'react'
 
@@ -8,15 +8,8 @@ const LoginPage = () => {
   return (
     <div className='container flex flex-col gap-12'>
       <form className='flex flex-col' action={async (formData: FormData) => {
-        "use server"
-        await executeAction({
-          actionFn: async () => {
-            await signIn(CREDENTIALS,
-              formData,
-
-            )
-          }
-        })
+        "use server";
+        await login(formData)
 
       }}>
         <label htmlFor="email">Email</label>
