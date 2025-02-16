@@ -1,4 +1,9 @@
 {
+  "Shared": {
+    "error": {
+      "somethingWentWrong": "Something went wrong, please try again later"
+    }
+  },
   "HomePage": {
     "title": "Hello world!",
     "welcome": {
@@ -13,7 +18,8 @@
       "email": "Email",
       "password": "Password",
       "confirmPassword": "Confirm Password",
-      "submit": "Sign Up"
+      "submit": "Sign Up",
+      "login": "Already have an account? Sign In"
     },
     "login": {
       "with": {
@@ -22,24 +28,72 @@
       "title": "Login",
       "email": "Email",
       "password": "Password",
-      "submit": "Sign In"
+      "submit": "Sign In",
+      "register": "Don't have an account? Sign Up"
     },
     "validation": {
-      "success": "Successfully registered",
+      "successRegister": "Successfully registered",
+      "successLogin": "Successfully logged in",
 
       "name": {
         "min": "Name must have at least 3 characters"
       },
       "email": {
         "format": "Invalid email",
-        "exists": "Email already exists."
+        "exists": "Email already exists.",
+        "notExists": "Invalid Credentials"
       },
       "password": {
-        "min": "Password must have at least 3 characters"
+        "min": "Password must have at least 3 characters",
+        "notMatch": "Invalid Credentials"
       },
       "confirmPassword": {
         "match": "Password does not match"
       }
     }
+  },
+  "Error": {
+    "description": "<p>We've unfortunately encountered an error.</p><p>You can try to <retry>reload the page</retry> you were visiting.</p>",
+    "title": "Something went wrong!"
+  },
+  "IndexPage": {
+    "description": "This is a financial web sj yh",
+    "title": "Home"
+  },
+  "LocaleLayout": {
+    "title": "Meatballs Lukman's"
+  },
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "locale": "{locale, select, id {Indonesia} en {English} other {Unknown}}"
+  },
+  "Manifest": {
+    "name": "Meatballs Lukman's"
+  },
+  "Navigation": {
+    "home": "Home",
+    "pathnames": "Pathnames"
+  },
+  "NotFoundPage": {
+    "description": "Please double-check the browser address bar or use the navigation to go to a known page.",
+    "title": "Page not found"
+  },
+  "PageLayout": {
+    "links": {
+      "docs": {
+        "description": "Learn more about",
+        "href": "https://meatballs-money-git-main-muhammad-ridhos-projects.vercel.app",
+        "title": "Docs"
+      },
+      "source": {
+        "description": "Browse the source code of this example on GitHub.",
+        "href": "https://github.com/edo6661/meatballs_money",
+        "title": "Source code"
+      }
+    }
+  },
+  "PathnamesPage": {
+    "description": "<p>The pathnames are internationalized too.</p><p>If you're using the default language English, you'll see <code>/en/pathnames</code> in the browser address bar on this page.</p><p>If you change the locale to German, the URL is localized accordingly (<code>/de/pfadnamen</code>).</p>",
+    "title": "Pathnames"
   }
 }

@@ -1,18 +1,37 @@
-'use client'
+'use client';
 
-export default function GlobalError({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string }
-  reset: () => void
-}) {
+import PageLayout from '@/components/common/PageLayout';
+import { useTranslations } from 'next-intl';
+import { useEffect } from 'react';
+
+type Props = {
+  error: Error;
+  reset(): void;
+};
+
+export default function Error({ error, reset }: Props) {
+  const t = useTranslations('Error');
+
+  useEffect(() => {
+    console.error(error);
+  }, [error]);
+
   return (
-    <>
-      <h1>Global Error Page</h1>
-      <h2>Something went wrong!</h2>
-      <button onClick={() => reset()}>Try again</button>
-      <pre>{error.message}</pre>
-    </>
-  )
+    <PageLayout title={t('title')}>
+      <div>
+        {t.rich('description', {
+          p: (chunks) => <p className="mt-4">{chunks}</p>,
+          retry: (chunks) => (
+            <button
+              className="text-white underline underline-offset-2"
+              onClick={reset}
+              type="button"
+            >
+              {chunks}
+            </button>
+          )
+        })}
+      </div>
+    </PageLayout>
+  );
 }

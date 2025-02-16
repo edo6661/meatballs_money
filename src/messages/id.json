@@ -1,4 +1,9 @@
 {
+  "Shared": {
+    "error": {
+      "somethingWentWrong": "Ada yang salah, silakan coba lagi nanti"
+    }
+  },
   "HomePage": {
     "title": "Halo Dunia!",
     "welcome": {
@@ -13,7 +18,8 @@
       "email": "Email",
       "password": "Password",
       "confirmPassword": "Konfirmasi Password",
-      "submit": "Daftar"
+      "submit": "Daftar",
+      "login": "Sudah memiliki akun? Masuk"
     },
     "login": {
       "with": {
@@ -22,23 +28,72 @@
       "title": "Login",
       "email": "Email",
       "password": "Password",
-      "submit": "Masuk"
+      "submit": "Masuk",
+      "register": "Belum memiliki akun? Daftar"
     },
     "validation": {
-      "success": "Berhasil mendaftar",
+      "successRegister": "Berhasil mendaftar",
+      "successLogin": "Berhasil masuk",
       "name": {
         "min": "Nama harus memiliki setidaknya 3 karakter"
       },
       "email": {
         "format": "Email tidak valid",
-        "exists": "Email sudah terdaftar."
+        "exists": "Email sudah terdaftar.",
+        "notExists": "Kredensial tidak valid"
       },
       "password": {
-        "min": "Kata sandi harus memiliki setidaknya 3 karakter"
+        "min": "Kata sandi harus memiliki setidaknya 3 karakter",
+        "notMatch": "Kredensial tidak valid"
       },
       "confirmPassword": {
         "match": "Kata sandi tidak cocok"
       }
     }
+  },
+
+  "Error": {
+    "description": "<p>Kami sayangnya mengalami kesalahan.</p><p>Anda dapat mencoba untuk <retry>memuat ulang halaman</retry> yang sedang Anda kunjungi.</p>",
+    "title": "Terjadi kesalahan!"
+  },
+  "IndexPage": {
+    "description": "Ini adalah web keuangan sj yh",
+    "title": "Meatballs Lukman's"
+  },
+  "LocaleLayout": {
+    "title": "Bakso Lukman's"
+  },
+  "LocaleSwitcher": {
+    "label": "Ganti bahasa",
+    "locale": "{locale, select, id {Indonesia} en {English} other {Tidak Diketahui}}"
+  },
+  "Manifest": {
+    "name": "Bakso Lukman's"
+  },
+  "Navigation": {
+    "home": "Beranda",
+    "pathnames": "Pathnames"
+  },
+  "NotFoundPage": {
+    "description": "Silakan periksa kembali bilah alamat browser atau gunakan navigasi untuk pergi ke halaman yang dikenal.",
+    "title": "Halaman tidak ditemukan"
+  },
+  "PageLayout": {
+    "links": {
+      "docs": {
+        "description": "Pelajari lebih lanjut tentang ",
+        "href": "https://meatballs-money-git-main-muhammad-ridhos-projects.vercel.app",
+        "title": "Dokumentasi"
+      },
+      "source": {
+        "description": "Jelajahi kode sumber dari contoh ini di GitHub.",
+        "href": "https://github.com/edo6661/meatballs_money",
+        "title": "Kode sumber"
+      }
+    }
+  },
+  "PathnamesPage": {
+    "description": "<p>Pathname juga diinternasionalkan.</p><p>Jika Anda menggunakan bahasa default Inggris, Anda akan melihat <code>/en/pathnames</code> di bilah alamat browser pada halaman ini.</p><p>Jika Anda mengubah bahasa ke Jerman, URL akan disesuaikan ",
+    "title": "Pathnames"
   }
 }
