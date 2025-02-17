@@ -17,6 +17,10 @@ export const routing = defineRouting({
       id: "/auth/masuk",
     },
     "/": "/",
+    "/create": {
+      en: "/create",
+      id: "/buat",
+    },
   },
 });
 

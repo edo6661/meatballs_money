@@ -9,7 +9,7 @@ import { useTranslations } from 'next-intl'
 import React, { useActionState, useEffect } from 'react'
 
 const LoginPage = () => {
-  const [state, signUp, isPending] = useActionState(login, {})
+  const [state, signIn, isPending] = useActionState(login, {})
   const t = useTranslations(LOGIN);
   const router = useRouter();
 
@@ -26,7 +26,7 @@ const LoginPage = () => {
 
   return (
     <div className='container flex flex-col gap-12'>
-      <form className='flex flex-col gap-4' action={signUp}>
+      <form className='flex flex-col gap-4' action={signIn}>
 
 
 

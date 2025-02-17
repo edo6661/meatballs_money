@@ -11,6 +11,33 @@
     },
     "about": "Pergi ke tentang halaman"
   },
+  "TransactionPage": {
+    "action": {
+      "create": "Buat",
+      "edit": "Edit",
+      "delete": "Hapus",
+      "cancel": "Batal"
+    },
+    "validation": {
+      "amountPositive": "Jumlah harus positif",
+      "dateInvalid": "Tanggal tidak valid",
+      "descriptionFilled": "Deskripsi harus diisi",
+      "userIdEmpty": "ID Pengguna tidak boleh kosong",
+      "transactionDateRequired": "Tanggal Transaksi harus diisi"
+    },
+    "fields": {
+      "type": "Tipe",
+      "amount": "Jumlah",
+      "transactionDate": "Tanggal Transaksi",
+      "description": "Deskripsi",
+      "category": "Kategori",
+      "createdAt": "Dibuat Pada",
+      "updatedAt": "Diperbarui Pada",
+      "income": "Pemasukan",
+      "expense": "Pengeluaran",
+      "submit": "Kirim"
+    }
+  },
   "AuthPage": {
     "register": {
       "title": "Registrasi",
@@ -93,7 +120,7 @@
     }
   },
   "PathnamesPage": {
-    "description": "<p>Pathname juga diinternasionalkan.</p><p>Jika Anda menggunakan bahasa default Inggris, Anda akan melihat <code>/en/pathnames</code> di bilah alamat browser pada halaman ini.</p><p>Jika Anda mengubah bahasa ke Jerman, URL akan disesuaikan ",
+    "description": "<p>Pathname juga diinternasionalkan.</p><p>Jika Anda menggunakan bahasa default Inggris, Anda akan melihat <code>/en/pathnames</code> di bilah alamat browser pada halaman ini.</p><p>Jika Anda mengubah bahasa ke English, URL akan disesuaikan</p> ",
     "title": "Pathnames"
   }
 }

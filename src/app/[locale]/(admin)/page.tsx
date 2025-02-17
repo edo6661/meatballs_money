@@ -5,6 +5,8 @@ const AdminDashboard = async () => {
   const session = await auth();
   const user = session?.user;
 
+  console.log("USER", user);
+
   return (
     <div>
       <h1>Welcome {user?.name}</h1>

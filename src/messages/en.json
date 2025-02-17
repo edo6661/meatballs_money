@@ -11,6 +11,33 @@
     },
     "about": "Go to the about page"
   },
+  "TransactionPage": {
+    "action": {
+      "create": "Create",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel"
+    },
+    "validation": {
+      "amountPositive": "Amount must be positive",
+      "dateInvalid": "Invalid date",
+      "descriptionFilled": "Description must be filled",
+      "userIdEmpty": "User ID cannot be empty",
+      "transactionDateRequired": "Transaction Date must be filled"
+    },
+    "fields": {
+      "type": "Type",
+      "amount": "Amount",
+      "transactionDate": "Transaction Date",
+      "description": "Description",
+      "category": "Category",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "income": "Income",
+      "expense": "Expense",
+      "submit": "Submit"
+    }
+  },
   "AuthPage": {
     "register": {
       "title": "Register",

@@ -30,8 +30,11 @@ model Transaction {
   transactionDate DateTime
   description     String[]
   category        String?
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
+  userId          String
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model User {
@@ -43,6 +46,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  transactions  Transaction[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
 

@@ -55,12 +55,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           if (!comparePassword) {
             return null;
           }
-          return {
-            email: userExist.email,
-            name: userExist.name,
-            id: userExist.id,
-            image: userExist.image,
-          };
+
+          return userExist;
         } catch (err) {
           console.error(err);
           return null;
@@ -69,11 +65,22 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, account }) {
+    async jwt({ token, user, account }) {
+      // nambahin id ke token biar bisa diakses di session
+      if (user) {
+        token.id = user.id;
+      }
       if (account?.provider === CREDENTIALS) {
         token.credentials = true;
       }
       return token;
+    },
+    async session({ session, token }) {
+      // nambahin id ke session biar bisa diakses di page
+      if (session.user && token.id) {
+        session.user.id = token.id as string;
+      }
+      return session;
     },
   },
 });
