@@ -31,8 +31,13 @@ export async function middleware(request: NextRequest) {
   const pathWithoutLocale = pathname.replace(localeRegex, "") || "/";
 
   // Define protected and auth routes
-  const protectedRoutes = ["/"];
-  const authRoutes = ["/auth/login", "/auth/register"];
+  const protectedRoutes = ["/", "/create", "/buat"];
+  const authRoutes = [
+    "/auth/login",
+    "/auth/register",
+    "/auth/masuk",
+    "/auth/daftar",
+  ];
 
   // Check if current path is protected or auth route
   const isProtectedRoute = protectedRoutes.some(
