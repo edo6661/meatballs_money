@@ -7,7 +7,6 @@ import { createTransaction } from '@/server/actions/transaction_action'
 import createToast from '@/utils/create_toast'
 import { useTranslations } from 'next-intl'
 import React, { useActionState, useEffect, useState } from 'react'
-import { Calendar } from '../ui/calendar'
 
 const FormCreateTransaction = (
   { userId }: { userId: string }
@@ -28,7 +27,6 @@ const FormCreateTransaction = (
   }, [state, router]);
 
   const [descriptions, setDescriptions] = useState([""]);
-  const [transactionDate, setTransactionDate] = useState<Date>(new Date());
 
   const addDescription = () => {
     setDescriptions([...descriptions, ""]);
@@ -102,7 +100,9 @@ const FormCreateTransaction = (
           <input type="text" name="category" id="category" />
         </div>
 
-        <div>
+        {
+          // ! kalo mau pake custom date picker, tapi ini gabisa karena incompatible react nya
+        /* <div>
           <label>{t('transactionDate')}</label>
 
           <input
@@ -121,8 +121,22 @@ const FormCreateTransaction = (
           {state.formErrors?.transactionDate?.map((error) => (
             <ErrorInputField error={error} key={error} />
           ))}
-        </div>
+        </div> */}
 
+        <div>
+
+          <label htmlFor="transactionDate">
+            {t('transactionDate')}
+          </label>
+          <input type="date" name="transactionDate" id="transactionDate" />
+          {state.formErrors?.transactionDate?.map((error) => (
+            <ErrorInputField
+              error={error}
+              key={error}
+            />
+          ))
+          }
+        </div>
         <div>
           <label>{t('description')}</label>
           {descriptions.map((desc, index) => (
