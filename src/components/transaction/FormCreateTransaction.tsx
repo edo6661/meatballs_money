@@ -7,6 +7,7 @@ import { createTransaction } from '@/server/actions/transaction_action'
 import createToast from '@/utils/create_toast'
 import { useTranslations } from 'next-intl'
 import React, { useActionState, useEffect, useState } from 'react'
+import { Calendar } from '../ui/calendar'
 
 const FormCreateTransaction = (
   { userId }: { userId: string }
@@ -27,6 +28,7 @@ const FormCreateTransaction = (
   }, [state, router]);
 
   const [descriptions, setDescriptions] = useState([""]);
+  const [transactionDate, setTransactionDate] = useState<Date>(new Date());
 
   const addDescription = () => {
     setDescriptions([...descriptions, ""]);
@@ -101,19 +103,26 @@ const FormCreateTransaction = (
         </div>
 
         <div>
+          <label>{t('transactionDate')}</label>
 
-          <label htmlFor="transactionDate">
-            {t('transactionDate')}
-          </label>
-          <input type="date" name="transactionDate" id="transactionDate" />
+          <input
+            type="hidden"
+            name="transactionDate"
+            value={transactionDate?.toISOString()}
+          />
+
+          <Calendar
+            mode="single"
+            selected={transactionDate}
+            onSelect={(date) => setTransactionDate(date!)}
+            className="rounded-md border"
+          />
+
           {state.formErrors?.transactionDate?.map((error) => (
-            <ErrorInputField
-              error={error}
-              key={error}
-            />
-          ))
-          }
+            <ErrorInputField error={error} key={error} />
+          ))}
         </div>
+
         <div>
           <label>{t('description')}</label>
           {descriptions.map((desc, index) => (
