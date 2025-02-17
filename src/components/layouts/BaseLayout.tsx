@@ -3,6 +3,8 @@ import { getMessages } from 'next-intl/server';
 import { ReactNode } from 'react';
 import Nav from '../header/Nav';
 import { Toaster } from '../ui/sonner';
+import { SessionProvider } from 'next-auth/react';
+
 
 
 type Props = {
@@ -13,13 +15,19 @@ type Props = {
 export default async function BaseLayout({ children, locale }: Props) {
   const messages = await getMessages();
 
+
   return (
     <html lang={locale}>
       <body>
         <NextIntlClientProvider messages={messages}>
-          <Toaster />
-          <Nav />
-          {children}
+          <SessionProvider
+
+          >
+
+            <Toaster />
+            <Nav />
+            {children}
+          </SessionProvider>
         </NextIntlClientProvider>
       </body>
     </html>

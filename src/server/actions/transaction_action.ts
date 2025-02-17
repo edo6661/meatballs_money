@@ -37,8 +37,6 @@ export const createTransaction = async (
     userId: userId,
   });
 
-  console.log("RESULT", result);
-
   if (!result.success) {
     return {
       formErrors: result.error.flatten().fieldErrors,
@@ -46,7 +44,6 @@ export const createTransaction = async (
   }
 
   try {
-    console.log("RESULT", result.data);
     await db.transaction.create({
       data: {
         type: result.data.type,

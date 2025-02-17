@@ -7,14 +7,11 @@ import { createTransaction } from '@/server/actions/transaction_action'
 import createToast from '@/utils/create_toast'
 import { useTranslations } from 'next-intl'
 import React, { useActionState, useEffect, useState } from 'react'
-type Params = { userId: string; }
 
 const FormCreateTransaction = (
-  { params }: {
-    params: Params;
-  }
+  { userId }: { userId: string }
 ) => {
-  const { userId } = params;
+
 
   const [state, create, isPending] = useActionState(createTransaction, {})
   const t = useTranslations(TRANSACTION_FIELDS);

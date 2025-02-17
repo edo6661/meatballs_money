@@ -10,7 +10,7 @@ const CreateTransactionPage = async () => {
     return notFound();
   }
   return <FormCreateTransaction
-    params={{ userId: user.id }}
+    userId={user.id}
 
   />
 }

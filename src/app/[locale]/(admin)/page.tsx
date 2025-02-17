@@ -1,3 +1,4 @@
+import { Link } from '@/i18n/routing';
 import { auth, signOut } from '@/lib/auth'
 import React from 'react'
 
@@ -5,11 +6,14 @@ const AdminDashboard = async () => {
   const session = await auth();
   const user = session?.user;
 
-  console.log("USER", user);
 
   return (
     <div>
+
       <h1>Welcome {user?.name}</h1>
+      <div>
+        <Link href="/create">Create</Link>
+      </div>
       <button
         onClick={async () => {
           "use server"
