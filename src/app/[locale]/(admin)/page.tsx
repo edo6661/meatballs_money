@@ -1,30 +1,16 @@
-import { Link } from '@/i18n/routing';
-import { signOut } from '@/lib/auth'
+import BarChartStackedLegend from '@/components/features/dashboard/BarChartStackedLegend'
+import MultipleLineChart from '@/components/features/dashboard/MultipleLineChart'
+import StackedAreaChart from '@/components/features/dashboard/StackedAreaChart'
 import React from 'react'
 
 const AdminDashboard = async () => {
-
-
   return (
     <div>
-
-      <div>
-        <Link href="/create">Create</Link>
+      <div className="grid grid-cols-2 gap-4">
+        <StackedAreaChart />
+        <MultipleLineChart />
+        <BarChartStackedLegend />
       </div>
-      <div>
-        <Link href="/transactions">Transactions</Link>
-      </div>
-      <button
-        onClick={async () => {
-          "use server"
-          await signOut({
-            redirectTo: "/auth/login",
-          })
-        }}
-        className='bg-red-500 px-4 py-2 rounded-xl'
-      >
-        Logout
-      </button>
     </div>
   )
 }
