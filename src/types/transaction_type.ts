@@ -20,3 +20,18 @@ export type PlainTransaction = Omit<
   updatedAt: string;
   transactionDate: string;
 };
+enum filterByDate {
+  TODAY,
+  WEEK,
+  MONTH,
+  YEAR,
+  ALL,
+}
+
+export type FilterByDate = keyof typeof filterByDate;
+
+export interface TransactionFilter {
+  filterByDate: filterByDate;
+  startDate?: string;
+  endDate?: string;
+}

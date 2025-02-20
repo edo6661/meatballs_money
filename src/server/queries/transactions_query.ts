@@ -1,15 +1,9 @@
 import { redirect } from "@/i18n/routing";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";
+import { BaseResponse } from "@/types/response";
 import { PlainTransaction } from "@/types/transaction_type";
 import { Transaction } from "@prisma/client";
-
-export interface BaseResponse<T> {
-  success: boolean;
-  message?: string;
-  data: T | null;
-  error?: unknown;
-}
 
 export const getTransactions = async (): Promise<
   BaseResponse<Transaction[]>
