@@ -21,6 +21,10 @@ export const routing = defineRouting({
       en: "/create",
       id: "/buat",
     },
+    "/transations": {
+      en: "/transactions",
+      id: "/transaksi",
+    },
   },
 });
 
