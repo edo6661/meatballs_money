@@ -1,8 +1,6 @@
 import { getTransactions } from "@/server/queries/transactions_query";
 import React from "react";
 import BtnActionTransaction from "./BtnActionTransaction";
-import { Button } from "@/components/ui/button";
-import { deleteTransaction } from "@/server/actions/transaction_action";
 
 const Transactions = async () => {
   const result = await getTransactions();
