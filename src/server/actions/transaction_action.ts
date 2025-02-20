@@ -57,7 +57,7 @@ export const upsertTransaction = async (
         },
       });
       return {
-        message: "Transaction successfully actioned",
+        message: "Transaction successfully Created",
       };
     }
     await db.transaction.update({
