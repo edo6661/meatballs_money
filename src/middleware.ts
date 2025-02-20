@@ -35,8 +35,8 @@ export async function middleware(request: NextRequest) {
     "/",
     "/create",
     "/buat",
-    "/transaksi",
-    "/transactions",
+    /^\/transaksi(\/|$)/,
+    /^\/transactions(\/|$)/,
   ];
   const authRoutes = [
     "/auth/login",
@@ -46,9 +46,14 @@ export async function middleware(request: NextRequest) {
   ];
 
   // Check if current path is protected or auth route
-  const isProtectedRoute = protectedRoutes.some(
-    (route) => pathWithoutLocale === route || pathWithoutLocale === `${route}/`
-  );
+  const isProtectedRoute = protectedRoutes.some((route) => {
+    if (route instanceof RegExp) {
+      return route.test(pathWithoutLocale);
+    }
+    const normalizedPath = pathWithoutLocale.replace(/\/$/, "");
+    return normalizedPath === route.replace(/\/$/, "");
+  });
+
   const isAuthRoute = authRoutes.some(
     (route) => pathWithoutLocale === route || pathWithoutLocale === `${route}/`
   );
