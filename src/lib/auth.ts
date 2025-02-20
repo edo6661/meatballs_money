@@ -6,6 +6,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { loginSchema } from "./zod/auth_schema";
 import bcrypt from "bcryptjs";
 import { CREDENTIALS } from "@/constants/auth_contant";
+import { User } from "@prisma/client";
 
 const adapter = PrismaAdapter(db);
 
@@ -55,8 +56,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           if (!comparePassword) {
             return null;
           }
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { password: _, ...user } = userExist;
 
-          return userExist;
+          return user;
         } catch (err) {
           console.error(err);
           return null;
@@ -65,10 +68,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user, account }) {
-      // nambahin id ke token biar bisa diakses di session
-      if (user) {
-        token.id = user.id;
+    async jwt({ token, user, account, trigger }) {
+      if (trigger === "signIn" && user) {
+        // ! nyalin semua properti user (yang baru login) ke token
+        token = { ...token, ...user };
       }
       if (account?.provider === CREDENTIALS) {
         token.credentials = true;
@@ -76,10 +79,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return token;
     },
     async session({ session, token }) {
-      // nambahin id ke session biar bisa diakses di page
-      if (session.user && token.id) {
-        session.user.id = token.id as string;
-      }
+      // ! nyalin semua properti token ke session.user biar bisa diakses di seluruh component
+      session.user = {
+        ...session.user,
+        ...token,
+      } as User;
+
       return session;
     },
   },

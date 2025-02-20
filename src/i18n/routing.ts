@@ -21,7 +21,7 @@ export const routing = defineRouting({
       en: "/create",
       id: "/buat",
     },
-    "/transations": {
+    "/transactions": {
       en: "/transactions",
       id: "/transaksi",
     },

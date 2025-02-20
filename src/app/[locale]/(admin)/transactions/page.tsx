@@ -1,8 +1,14 @@
-import React from 'react'
+import Transactions from '@/components/features/transaction/Transactions'
+import React, { Suspense } from 'react'
 
-const TransactionsPage = () => {
+const TransactionsPage = async () => {
+
   return (
-    <div></div>
+    <div>
+      <Suspense fallback={<div>Loading Transactions...</div>}>
+        <Transactions />
+      </Suspense>
+    </div>
   )
 }
 

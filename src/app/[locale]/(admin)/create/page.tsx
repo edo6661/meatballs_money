@@ -1,22 +1,18 @@
-import FormCreateTransaction from '@/components/transaction/FormCreateTransaction'
-import { redirect } from '@/i18n/routing';
-import { auth } from '@/lib/auth';
-import React from 'react'
+import WithUser from '@/components/common/WithUser';
+import FormCreateTransaction from '@/components/features/transaction/FormCreateTransaction'
+import React, { Suspense } from 'react'
 
 const CreateTransactionPage = async () => {
-  const session = await auth();
-  const user = session?.user;
-  if (!user?.id) {
-    return redirect({
-      href: "/auth/login",
-      locale: "id",
 
-    });
-  }
-  return <FormCreateTransaction
-    userId={user.id}
+  return <Suspense fallback={<div>Loading User to form create transactions...</div>}>
+    <WithUser>
+      {(user) => (
+        <FormCreateTransaction user={user} />
+      )}
+    </WithUser>
+  </Suspense>
 
-  />
+
 }
 
 export default CreateTransactionPage

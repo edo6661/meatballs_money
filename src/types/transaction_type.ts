@@ -1,4 +1,4 @@
-import { BaseActionState } from "@/common/action_state";
+import { BaseActionState } from "@/utils/common/action_state";
 
 export interface TransactionState extends BaseActionState {
   formErrors?: {

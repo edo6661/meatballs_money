@@ -2,7 +2,7 @@
 
 import { CREDENTIALS } from "@/constants/auth_contant";
 import { AUTH_VALIDATION, SHARED } from "@/constants/il8n";
-import { handleActionError } from "@/helper/handle_action_error";
+import { handleActionError } from "@/utils/helper/handle_action_error";
 import { signIn } from "@/lib/auth";
 import db from "@/lib/prisma";
 import { getLoginSchema, getRegisterSchema } from "@/lib/zod/auth_schema";

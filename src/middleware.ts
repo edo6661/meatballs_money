@@ -31,7 +31,13 @@ export async function middleware(request: NextRequest) {
   const pathWithoutLocale = pathname.replace(localeRegex, "") || "/";
 
   // Define protected and auth routes
-  const protectedRoutes = ["/", "/create", "/buat"];
+  const protectedRoutes = [
+    "/",
+    "/create",
+    "/buat",
+    "/transaksi",
+    "/transactions",
+  ];
   const authRoutes = [
     "/auth/login",
     "/auth/register",

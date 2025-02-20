@@ -15,7 +15,7 @@ const AdminDashboard = async () => {
         <Link href="/create">Create</Link>
       </div>
       <div>
-        <Link href="/transations">Transactions</Link>
+        <Link href="/transactions">Transactions</Link>
       </div>
       <button
         onClick={async () => {

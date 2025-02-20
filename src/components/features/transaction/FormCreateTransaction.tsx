@@ -5,13 +5,13 @@ import { TRANSACTION_FIELDS } from '@/constants/il8n'
 import { useRouter } from '@/i18n/routing'
 import { createTransaction } from '@/server/actions/transaction_action'
 import createToast from '@/utils/create_toast'
+import { User } from '@prisma/client'
 import { useTranslations } from 'next-intl'
 import React, { useActionState, useEffect, useState } from 'react'
 
 const FormCreateTransaction = (
-  { userId }: { userId: string }
+  { user }: { user: User }
 ) => {
-
 
   const [state, create, isPending] = useActionState(createTransaction, {})
   const t = useTranslations(TRANSACTION_FIELDS);
@@ -22,7 +22,7 @@ const FormCreateTransaction = (
       createToast({
         title: state.message,
       });
-      router.push('/');
+      router.push('/transactions');
     }
   }, [state, router]);
 
@@ -50,7 +50,7 @@ const FormCreateTransaction = (
   return (
     <div className='container flex flex-col gap-12'>
       <form className='flex flex-col gap-4' action={create}>
-        <input type="hidden" name="userId" value={userId} />
+        <input type="hidden" name="userId" value={user.id} />
         {state.formErrors?.userId?.map((error) => (
           <ErrorInputField
             error={error}
