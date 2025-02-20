@@ -1,5 +1,8 @@
 import { getTransactions } from "@/server/queries/transactions_query";
 import React from "react";
+import BtnActionTransaction from "./BtnActionTransaction";
+import { Button } from "@/components/ui/button";
+import { deleteTransaction } from "@/server/actions/transaction_action";
 
 const Transactions = async () => {
   const result = await getTransactions();
@@ -11,7 +14,9 @@ const Transactions = async () => {
   }
   return <div className="flex flex-wrap gap-24 items-start justify-center">
     {result.data?.map((transaction, index) => {
-      return <div key={index}>
+      return <div key={index}
+
+      >
         <div>Amount: {transaction.amount.toString()}</div>
         {transaction.category && <div>Category: {transaction.category}</div>}
         <div>Type: {transaction.type}</div>
@@ -24,10 +29,26 @@ const Transactions = async () => {
           )}
         </div>
         <div>
+          transaction date: {
+            new Date(transaction.transactionDate).toLocaleString()
+          }
+        </div>
+        <div>
           createdAt: {
             new Date(transaction.createdAt).toLocaleString()
           }
         </div>
+
+        <div>
+          updatedAt: {
+            new Date(transaction.updatedAt).toLocaleString()
+          }
+        </div>
+
+        <BtnActionTransaction
+          id={transaction.id}
+        />
+
       </div>
     }
     )}

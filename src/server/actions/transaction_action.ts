@@ -7,7 +7,7 @@ import { getTransactionSchema } from "@/lib/zod/transation_schema";
 import { TransactionState } from "@/types/transaction_type";
 import { getTranslations } from "next-intl/server";
 
-export const createTransaction = async (
+export const upsertTransaction = async (
   prevState: TransactionState,
   formData: FormData
 ): Promise<TransactionState> => {
@@ -23,6 +23,7 @@ export const createTransaction = async (
       },
     };
   }
+  const transactionId = formData.get("transactionId");
   const transactionDate = new Date(transactionDateValue.toString());
   const description = formData.getAll("description");
   const category = formData.get("category");
@@ -44,7 +45,25 @@ export const createTransaction = async (
   }
 
   try {
-    await db.transaction.create({
+    if (!transactionId) {
+      await db.transaction.create({
+        data: {
+          type: result.data.type,
+          amount: result.data.amount,
+          transactionDate: result.data.transactionDate,
+          description: result.data.description,
+          category: result.data.category,
+          userId: result.data.userId,
+        },
+      });
+      return {
+        message: "Transaction successfully actioned",
+      };
+    }
+    await db.transaction.update({
+      where: {
+        id: transactionId as string,
+      },
       data: {
         type: result.data.type,
         amount: result.data.amount,
@@ -52,11 +71,30 @@ export const createTransaction = async (
         description: result.data.description,
         category: result.data.category,
         userId: result.data.userId,
+        updatedAt: new Date(),
       },
     });
-
     return {
-      message: "Transaction created successfully",
+      message: "Transaction successfully updated",
+    };
+  } catch (err) {
+    await handleActionError(err);
+    return {
+      error: s("error.somethingWentWrong"),
+    };
+  }
+};
+
+export const deleteTransaction = async (id: string) => {
+  const s = await getTranslations(SHARED);
+  try {
+    await db.transaction.delete({
+      where: {
+        id: id,
+      },
+    });
+    return {
+      message: "Transaction successfully deleted",
     };
   } catch (err) {
     await handleActionError(err);

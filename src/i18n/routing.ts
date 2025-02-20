@@ -25,6 +25,10 @@ export const routing = defineRouting({
       en: "/transactions",
       id: "/transaksi",
     },
+    "/transactions/[transactionId]": {
+      en: "/transactions/[transactionId]",
+      id: "/transaksi/[transactionId]",
+    },
   },
 });
 
