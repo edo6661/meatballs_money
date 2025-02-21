@@ -20,18 +20,29 @@ export type PlainTransaction = Omit<
   updatedAt: string;
   transactionDate: string;
 };
-enum filterByDate {
-  TODAY,
-  WEEK,
-  MONTH,
-  YEAR,
-  ALL,
+export enum FilterByDate {
+  TODAY = "TODAY",
+  WEEK = "WEEK",
+  MONTH = "MONTH",
+  YEAR = "YEAR",
+  ALL = "ALL",
 }
 
-export type FilterByDate = keyof typeof filterByDate;
+export const filterByDateOptions = [
+  { value: FilterByDate.TODAY, label: "Today" },
+  { value: FilterByDate.WEEK, label: "This Week" },
+  { value: FilterByDate.MONTH, label: "This Month" },
+  { value: FilterByDate.YEAR, label: "This Year" },
+  { value: FilterByDate.ALL, label: "All" },
+];
 
-export interface TransactionFilter {
-  filterByDate: filterByDate;
-  startDate?: string;
-  endDate?: string;
+export const filterByDateDefaultValue: FilterByDate = FilterByDate.ALL;
+
+export interface IncomeExpenseAggregate {
+  income: number;
+  expense: number;
+}
+
+export interface IncomeExpenseGrouped extends IncomeExpenseAggregate {
+  month: string;
 }

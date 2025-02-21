@@ -1,13 +1,16 @@
 import BarChartStackedLegend from '@/components/features/dashboard/BarChartStackedLegend'
 import MultipleLineChart from '@/components/features/dashboard/MultipleLineChart'
-import StackedAreaChart from '@/components/features/dashboard/StackedAreaChart'
-import React from 'react'
+import WrapperStackedAreaChart from '@/components/features/dashboard/WrapperStackedAreaChart'
+import React, { Suspense } from 'react'
 
 const AdminDashboard = async () => {
   return (
-    <div>
+    <div className='container'>
+      <p>test</p>
       <div className="grid grid-cols-2 gap-4">
-        <StackedAreaChart />
+        <Suspense fallback={<div>Loading...</div>}>
+          <WrapperStackedAreaChart />
+        </Suspense>
         <MultipleLineChart />
         <BarChartStackedLegend />
       </div>

@@ -6,6 +6,7 @@ import db from "@/lib/prisma";
 import { getTransactionSchema } from "@/lib/zod/transation_schema";
 import { TransactionState } from "@/types/transaction_type";
 import { getTranslations } from "next-intl/server";
+import { revalidatePath } from "next/cache";
 
 export const upsertTransaction = async (
   prevState: TransactionState,
@@ -74,6 +75,7 @@ export const upsertTransaction = async (
         updatedAt: new Date(),
       },
     });
+    revalidatePath("/");
     return {
       message: "Transaction successfully updated",
     };

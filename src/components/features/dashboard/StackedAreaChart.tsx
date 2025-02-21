@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
 import { TrendingUp } from "lucide-react"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import {
   Card,
@@ -10,51 +10,77 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-]
+} from "@/components/ui/chart";
+import {
+  IncomeExpenseAggregate,
+  IncomeExpenseGrouped,
+} from "@/types/transaction_type";
 
-const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "hsl(var(--chart-2))",
-  },
-} satisfies ChartConfig
+interface StackedAreaChartProps {
+  data: IncomeExpenseAggregate | IncomeExpenseGrouped[] | null;
+}
 
-export default function StackedAreaChart() {
+export default function StackedAreaChart({ data }: StackedAreaChartProps) {
+  // const [selected,setSelectedDate] = useState<FilterByDate>(filterByDateDefaultValue);
+
+  // Persiapkan data untuk chart
+  let displayData: IncomeExpenseGrouped[] = [];
+
+  if (data) {
+    if (Array.isArray(data)) {
+      displayData = data;
+    } else {
+      displayData = [
+        {
+          month: new Date().toISOString().slice(0, 7),
+          income: data.income,
+          expense: data.expense,
+        },
+      ];
+    }
+  }
+
+  console.log(displayData);
+
+  // Konfigurasi chart untuk key income dan expense
+  const chartConfig: ChartConfig = {
+    income: {
+      label: "Income",
+      color: "hsl(var(--chart-income, 120, 100%, 50%))",
+    },
+    expense: {
+      label: "Expense",
+      color: "hsl(var(--chart-expense, 0, 100%, 50%))",
+    },
+  };
+
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Area Chart - Stacked</CardTitle>
-        <CardDescription>
-          Pengeluaran dan pendapatan bulanan
-        </CardDescription>
+      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between">
+        <div>
+          <CardTitle>Pengeluaran dan Pendapatan</CardTitle>
+          <CardDescription>
+            Pengeluaran dan pendapatan all time
+          </CardDescription>
+        </div>
+        <div>
+          {/* <SelectFilter
+            filter={selected}
+            onChangeFilter={(val) => setSelected(val as FilterByDate)}
+          /> */}
+        </div>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
           <AreaChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
+            data={displayData}
+            margin={{ left: 12, right: 12 }}
           >
             <CartesianGrid vertical={false} />
             <XAxis
@@ -62,26 +88,26 @@ export default function StackedAreaChart() {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={(value) => value}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent indicator="dot" />}
             />
             <Area
-              dataKey="mobile"
+              dataKey="expense"
               type="natural"
-              fill="var(--color-mobile)"
+              fill={chartConfig.expense.color}
               fillOpacity={0.4}
-              stroke="var(--color-mobile)"
+              stroke={chartConfig.expense.color}
               stackId="a"
             />
             <Area
-              dataKey="desktop"
+              dataKey="income"
               type="natural"
-              fill="var(--color-desktop)"
+              fill={chartConfig.income.color}
               fillOpacity={0.4}
-              stroke="var(--color-desktop)"
+              stroke={chartConfig.income.color}
               stackId="a"
             />
           </AreaChart>
@@ -91,14 +117,17 @@ export default function StackedAreaChart() {
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
             <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+              <TrendingUp size={16} />
+              <span>{displayData.length > 0 ? displayData[0].income : 0}</span>
             </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              January - June 2024
+              {displayData.length > 0
+                ? `${displayData[0].month} - ${displayData[displayData.length - 1].month}`
+                : "No data"}
             </div>
           </div>
         </div>
       </CardFooter>
     </Card>
-  )
+  );
 }

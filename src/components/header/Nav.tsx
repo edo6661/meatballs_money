@@ -12,10 +12,14 @@ export default async function Nav() {
       >
         Home
       </Link>
-
-      <LocaleSwitcher />
       {session?.user && (
         <div className="md:flex hidden gap-6 items-center ">
+          <div>
+            <Link href="/create">Create</Link>
+          </div>
+          <div>
+            <Link href="/transactions">Transactions</Link>
+          </div>
           <Button
             onClick={async () => {
               "use server"
@@ -27,14 +31,12 @@ export default async function Nav() {
           >
             Logout
           </Button>
-          <div>
-            <Link href="/create">Create</Link>
-          </div>
-          <div>
-            <Link href="/transactions">Transactions</Link>
-          </div>
+
         </div>
       )}
+
+      <LocaleSwitcher />
+
 
     </header>
   );
