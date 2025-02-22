@@ -9,11 +9,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { filterByDateOptions } from "@/types/transaction_type";
+import { FilterByDate, filterByDateOptions } from "@/types/transaction_type";
 
 interface SelectFilterProps {
-  filter: string;
-  onChangeFilter: (value: string) => void;
+  filter: FilterByDate;
+  onChangeFilter: (value: FilterByDate) => void;
 }
 
 export function SelectFilter({ filter, onChangeFilter }: SelectFilterProps) {

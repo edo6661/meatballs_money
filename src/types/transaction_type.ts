@@ -44,5 +44,6 @@ export interface IncomeExpenseAggregate {
 }
 
 export interface IncomeExpenseGrouped extends IncomeExpenseAggregate {
-  month: string;
+  period: string;
+  timestamp?: Date;
 }

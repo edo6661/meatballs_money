@@ -4,11 +4,10 @@ import db from "@/lib/prisma";
 import { BaseResponse } from "@/types/response";
 import {
   FilterByDate,
-  IncomeExpenseAggregate,
   IncomeExpenseGrouped,
   PlainTransaction,
 } from "@/types/transaction_type";
-import { Prisma, Transaction, TransactionType } from "@prisma/client";
+import { Transaction, TransactionType } from "@prisma/client";
 import { Session } from "next-auth";
 import {
   startOfToday,
@@ -20,6 +19,8 @@ import {
   startOfYear,
   endOfYear,
   format,
+  startOfHour,
+  startOfDay,
 } from "date-fns";
 
 export const avoidUserNull = async (): Promise<Session> => {
@@ -44,12 +45,14 @@ export const getTransactions = async (): Promise<
 > => {
   try {
     const session = await avoidUserNull();
-    const transactions = (await db.$queryRaw`
-      SELECT *, GREATEST("createdAt", "updatedAt") as "latestTimestamp"
-      FROM "Transaction"
-      WHERE "userId" = ${session.user.id}
-      ORDER BY "latestTimestamp" DESC
-    `) as Transaction[];
+    const transactions = await db.transaction.findMany({
+      where: {
+        userId: session.user.id,
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+    });
 
     return {
       success: true,
@@ -105,109 +108,116 @@ export const getTransactionById = async (
 
 export const getIncomeAndExpenseBasedOnFilter = async (
   filter: FilterByDate
-): Promise<BaseResponse<IncomeExpenseAggregate | IncomeExpenseGrouped[]>> => {
+): Promise<BaseResponse<IncomeExpenseGrouped[]>> => {
   try {
-    // Pastikan session valid
     const session = await avoidUserNull();
     const now = new Date();
 
-    let startDate: Date | undefined;
-    let endDate: Date | undefined;
+    // Tentukan rentang waktu dan format pengelompokan
+    let groupConfig: {
+      start: Date;
+      end: Date;
+      groupBy: "hour" | "day" | "month" | "year";
+    };
 
-    // Tentukan rentang tanggal berdasarkan filter
     switch (filter) {
       case FilterByDate.TODAY:
-        startDate = startOfToday();
-        endDate = endOfToday();
+        groupConfig = {
+          start: startOfToday(),
+          end: endOfToday(),
+          groupBy: "hour",
+        };
         break;
       case FilterByDate.WEEK:
-        startDate = startOfWeek(now, { weekStartsOn: 1 });
-        endDate = endOfWeek(now, { weekStartsOn: 1 });
+        groupConfig = {
+          start: startOfWeek(now, { weekStartsOn: 1 }),
+          end: endOfWeek(now, { weekStartsOn: 1 }),
+          groupBy: "day",
+        };
         break;
       case FilterByDate.MONTH:
-        startDate = startOfMonth(now);
-        endDate = endOfMonth(now);
+        groupConfig = {
+          start: startOfMonth(now),
+          end: endOfMonth(now),
+          groupBy: "day",
+        };
         break;
       case FilterByDate.YEAR:
-        startDate = startOfYear(now);
-        endDate = endOfYear(now);
+        groupConfig = {
+          start: startOfYear(now),
+          end: endOfYear(now),
+          groupBy: "month",
+        };
         break;
       case FilterByDate.ALL:
       default:
-        // Tidak menetapkan filter tanggal untuk ALL
+        groupConfig = {
+          start: new Date(0), // Semua waktu
+          end: new Date(),
+          groupBy: "year",
+        };
         break;
     }
 
-    // Gunakan Prisma.TransactionWhereInput untuk tipe whereClause
-    const whereClause: Prisma.TransactionWhereInput = {
-      userId: session.user.id,
-      ...(filter !== FilterByDate.ALL &&
-        startDate &&
-        endDate && {
-          transactionDate: {
-            gte: startDate,
-            lte: endDate,
-          },
-        }),
-    };
-
-    // Ambil data transaksi dari database
+    // Query database
     const transactions = await db.transaction.findMany({
-      where: whereClause,
-    });
-    if (filter === FilterByDate.YEAR || filter === FilterByDate.ALL) {
-      const groupedData = transactions.reduce(
-        (acc: Record<string, IncomeExpenseAggregate>, curr) => {
-          // Kelompokkan berdasarkan bulan dengan format "yyyy-MM"
-          const month = format(curr.transactionDate, "yyyy-MM");
-          if (!acc[month]) {
-            acc[month] = { income: 0, expense: 0 };
-          }
-          if (curr.type === TransactionType.INCOME) {
-            acc[month].income += Number(curr.amount);
-          } else if (curr.type === TransactionType.EXPENSE) {
-            acc[month].expense += Number(curr.amount);
-          }
-          return acc;
+      where: {
+        userId: session.user.id,
+        transactionDate: {
+          gte: groupConfig.start,
+          lte: groupConfig.end,
         },
-        {} as Record<string, IncomeExpenseAggregate>
-      );
+      },
+    });
 
-      // Sort keys (bulan) secara descending
-      const result: IncomeExpenseGrouped[] = Object.keys(groupedData)
-        .sort((a, b) => {
-          // Karena format "yyyy-MM" bisa dibandingkan secara lexicografis
-          if (a < b) return 1;
-          if (a > b) return -1;
-          return 0;
-        })
-        .map((month) => ({
-          month,
-          income: groupedData[month].income,
-          expense: groupedData[month].expense,
-        }));
+    // Fungsi pengelompokan
+    const groupedData = transactions.reduce((acc, transaction) => {
+      let periodKey: string;
+      let timestamp: Date;
 
-      return {
-        success: true,
-        data: result,
-      };
-    } else {
-      // Untuk filter TODAY, WEEK, dan MONTH, hitung total keseluruhan
-      const income = transactions
-        .filter((t) => t.type === TransactionType.INCOME)
-        .reduce((sum, t) => sum + Number(t.amount), 0);
+      switch (groupConfig.groupBy) {
+        case "hour":
+          periodKey = format(transaction.transactionDate, "HH:00");
+          timestamp = startOfHour(transaction.transactionDate);
+          break;
+        case "day":
+          periodKey = format(transaction.transactionDate, "dd/MM");
+          timestamp = startOfDay(transaction.transactionDate);
+          break;
+        case "month":
+          periodKey = format(transaction.transactionDate, "MM/yyyy");
+          timestamp = startOfMonth(transaction.transactionDate);
+          break;
+        case "year":
+          periodKey = format(transaction.transactionDate, "yyyy");
+          timestamp = startOfYear(transaction.transactionDate);
+          break;
+      }
 
-      const expense = transactions
-        .filter((t) => t.type === TransactionType.EXPENSE)
-        .reduce((sum, t) => sum + Number(t.amount), 0);
+      if (!acc[periodKey]) {
+        acc[periodKey] = {
+          period: periodKey,
+          timestamp,
+          income: 0,
+          expense: 0,
+        };
+      }
 
-      const result: IncomeExpenseAggregate = { income, expense };
+      if (transaction.type === TransactionType.INCOME) {
+        acc[periodKey].income += Number(transaction.amount);
+      } else {
+        acc[periodKey].expense += Number(transaction.amount);
+      }
 
-      return {
-        success: true,
-        data: result,
-      };
-    }
+      return acc;
+    }, {} as Record<string, IncomeExpenseGrouped>);
+
+    // Konversi ke array dan urutkan
+    const result = Object.values(groupedData).sort(
+      (a, b) => a.timestamp!.getTime() - b.timestamp!.getTime()
+    );
+
+    return { success: true, data: result };
   } catch (e) {
     return {
       success: false,

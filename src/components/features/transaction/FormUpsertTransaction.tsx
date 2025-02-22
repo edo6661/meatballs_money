@@ -120,7 +120,7 @@ const FormUpsertTransaction = ({
         <div>
           <label htmlFor="transactionDate">{t("transactionDate")}</label>
           <input
-            type="date"
+            type="datetime-local"
             name="transactionDate"
             id="transactionDate"
             defaultValue={

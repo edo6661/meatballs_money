@@ -19,6 +19,7 @@ const LoginPage = () => {
         title: state.message,
       });
       router.replace('/');
+      router.refresh();
     }
   }, [state, router]);
 

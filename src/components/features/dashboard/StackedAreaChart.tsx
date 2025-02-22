@@ -1,6 +1,5 @@
 "use client";
 
-import { TrendingUp } from "lucide-react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import {
@@ -18,18 +17,35 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import {
+  FilterByDate,
+  filterByDateDefaultValue,
   IncomeExpenseAggregate,
   IncomeExpenseGrouped,
 } from "@/types/transaction_type";
+import { SelectFilter } from "./SelectFilter";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { format } from "date-fns";
 
 interface StackedAreaChartProps {
   data: IncomeExpenseAggregate | IncomeExpenseGrouped[] | null;
 }
 
 export default function StackedAreaChart({ data }: StackedAreaChartProps) {
-  // const [selected,setSelectedDate] = useState<FilterByDate>(filterByDateDefaultValue);
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
 
-  // Persiapkan data untuk chart
+  function handleSearch(term: FilterByDate) {
+    const params = new URLSearchParams(searchParams);
+    if (term) {
+      params.set('filter', term);
+    } else {
+      params.delete('filter');
+    }
+    replace(`${pathname}?${params.toString()}`);
+  }
+
+
   let displayData: IncomeExpenseGrouped[] = [];
 
   if (data) {
@@ -38,7 +54,8 @@ export default function StackedAreaChart({ data }: StackedAreaChartProps) {
     } else {
       displayData = [
         {
-          month: new Date().toISOString().slice(0, 7),
+          period: format(new Date(), "yyyy-MM-dd"),
+          timestamp: new Date(),
           income: data.income,
           expense: data.expense,
         },
@@ -46,7 +63,6 @@ export default function StackedAreaChart({ data }: StackedAreaChartProps) {
     }
   }
 
-  console.log(displayData);
 
   // Konfigurasi chart untuk key income dan expense
   const chartConfig: ChartConfig = {
@@ -70,10 +86,12 @@ export default function StackedAreaChart({ data }: StackedAreaChartProps) {
           </CardDescription>
         </div>
         <div>
-          {/* <SelectFilter
-            filter={selected}
-            onChangeFilter={(val) => setSelected(val as FilterByDate)}
-          /> */}
+          <SelectFilter
+            filter={
+              searchParams.get('filter') as FilterByDate || filterByDateDefaultValue
+            }
+            onChangeFilter={(val) => handleSearch(val)}
+          />
         </div>
       </CardHeader>
       <CardContent>
@@ -84,12 +102,13 @@ export default function StackedAreaChart({ data }: StackedAreaChartProps) {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="period"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
               tickFormatter={(value) => value}
             />
+
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent indicator="dot" />}
@@ -114,19 +133,15 @@ export default function StackedAreaChart({ data }: StackedAreaChartProps) {
         </ChartContainer>
       </CardContent>
       <CardFooter>
-        <div className="flex w-full items-start gap-2 text-sm">
-          <div className="grid gap-2">
-            <div className="flex items-center gap-2 font-medium leading-none">
-              <TrendingUp size={16} />
-              <span>{displayData.length > 0 ? displayData[0].income : 0}</span>
-            </div>
-            <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              {displayData.length > 0
-                ? `${displayData[0].month} - ${displayData[displayData.length - 1].month}`
-                : "No data"}
-            </div>
-          </div>
+        <div className="flex items-center gap-2 leading-none text-muted-foreground">
+          {displayData.length > 0
+            ? `${format(displayData[0].timestamp!, "dd/MM/yyyy")} - ${format(
+              displayData[displayData.length - 1].timestamp!,
+              "dd/MM/yyyy"
+            )}`
+            : "No data"}
         </div>
+
       </CardFooter>
     </Card>
   );
