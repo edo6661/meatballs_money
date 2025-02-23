@@ -1,6 +1,5 @@
-import BarChartStackedLegend from '@/components/features/dashboard/BarChartStackedLegend'
 import FilterGraphData from '@/components/features/dashboard/FilterGraphData';
-import MultipleLineChart from '@/components/features/dashboard/MultipleLineChart'
+import WrapperBarChartStackedLegend from '@/components/features/dashboard/WrapperBarChartStackedLegend';
 import WrapperMultipleLineChart from '@/components/features/dashboard/WrapperMultipleLineChart';
 import WrapperStackedAreaChart from '@/components/features/dashboard/WrapperStackedAreaChart'
 import { FilterByDate } from '@/types/transaction_type';
@@ -36,7 +35,9 @@ export default async function AdminDashboard(props: {
       <Suspense
         fallback={<div>Loading BAR CHART</div>}
       >
-        <BarChartStackedLegend />
+        <WrapperBarChartStackedLegend
+          filter={filter}
+        />
 
       </Suspense>
 

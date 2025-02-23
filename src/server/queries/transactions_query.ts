@@ -7,6 +7,7 @@ import {
   IncomeExpenseGrouped,
   PlainTransaction,
   ProfitLossGrouped,
+  TransactionFrequencyGrouped,
 } from "@/types/transaction_type";
 import { Transaction, TransactionType } from "@prisma/client";
 import { Session } from "next-auth";
@@ -235,7 +236,6 @@ export const getProfitAndLossBasedOnFilter = async (
     const session = await avoidUserNull();
     const now = new Date();
 
-    // Tentukan rentang waktu dan format pengelompokan
     let groupConfig: {
       start: Date;
       end: Date;
@@ -274,14 +274,13 @@ export const getProfitAndLossBasedOnFilter = async (
       case FilterByDate.ALL:
       default:
         groupConfig = {
-          start: new Date(0), // Semua waktu
+          start: new Date(0),
           end: new Date(),
           groupBy: "year",
         };
         break;
     }
 
-    // Query transaksi berdasarkan filter dan user
     const transactions = await db.transaction.findMany({
       where: {
         userId: session.user.id,
@@ -292,27 +291,28 @@ export const getProfitAndLossBasedOnFilter = async (
       },
     });
 
-    // Pengelompokan transaksi dan perhitungan net (income - expense)
     const groupedData = transactions.reduce((acc, transaction) => {
+      // Pastikan transactionDate diparsing menjadi Date yang valid
+      const transDate = new Date(transaction.transactionDate);
       let periodKey: string;
       let timestamp: Date;
 
       switch (groupConfig.groupBy) {
         case "hour":
-          periodKey = format(transaction.transactionDate, "HH:00");
-          timestamp = startOfHour(transaction.transactionDate);
+          periodKey = format(transDate, "HH:00");
+          timestamp = startOfHour(transDate);
           break;
         case "day":
-          periodKey = format(transaction.transactionDate, "dd/MM");
-          timestamp = startOfDay(transaction.transactionDate);
+          periodKey = format(transDate, "dd/MM");
+          timestamp = startOfDay(transDate);
           break;
         case "month":
-          periodKey = format(transaction.transactionDate, "MM/yyyy");
-          timestamp = startOfMonth(transaction.transactionDate);
+          periodKey = format(transDate, "MM/yyyy");
+          timestamp = startOfMonth(transDate);
           break;
         case "year":
-          periodKey = format(transaction.transactionDate, "yyyy");
-          timestamp = startOfYear(transaction.transactionDate);
+          periodKey = format(transDate, "yyyy");
+          timestamp = startOfYear(transDate);
           break;
       }
 
@@ -320,11 +320,10 @@ export const getProfitAndLossBasedOnFilter = async (
         acc[periodKey] = {
           period: periodKey,
           timestamp,
-          net: 0, // Nilai awal net
+          net: 0,
         };
       }
 
-      // Tambahkan income atau kurangi expense dari nilai net
       if (transaction.type === TransactionType.INCOME) {
         acc[periodKey].net += Number(transaction.amount);
       } else {
@@ -334,7 +333,6 @@ export const getProfitAndLossBasedOnFilter = async (
       return acc;
     }, {} as Record<string, { period: string; timestamp: Date; net: number }>);
 
-    // Konversi hasil grouping ke array dan hitung profit & loss
     const result: ProfitLossGrouped[] = Object.values(groupedData)
       .map((group) => {
         const profit = group.net > 0 ? group.net : 0;
@@ -347,6 +345,124 @@ export const getProfitAndLossBasedOnFilter = async (
         };
       })
       .sort((a, b) => a.timestamp!.getTime() - b.timestamp!.getTime());
+
+    return { success: true, data: result };
+  } catch (e) {
+    return {
+      success: false,
+      message: "Something went wrong",
+      data: null,
+      error: e,
+    };
+  }
+};
+export const getTransactionFrequencyBasedOnFilter = async (
+  filter: FilterByDate
+): Promise<BaseResponse<TransactionFrequencyGrouped[]>> => {
+  try {
+    const session = await avoidUserNull();
+    const now = new Date();
+
+    let groupConfig: {
+      start: Date;
+      end: Date;
+      groupBy: "hour" | "day" | "month" | "year";
+    };
+
+    switch (filter) {
+      case FilterByDate.TODAY:
+        groupConfig = {
+          start: startOfToday(),
+          end: endOfToday(),
+          groupBy: "hour",
+        };
+        break;
+      case FilterByDate.WEEK:
+        groupConfig = {
+          start: startOfWeek(now, { weekStartsOn: 1 }),
+          end: endOfWeek(now, { weekStartsOn: 1 }),
+          groupBy: "day",
+        };
+        break;
+      case FilterByDate.MONTH:
+        groupConfig = {
+          start: startOfMonth(now),
+          end: endOfMonth(now),
+          groupBy: "day",
+        };
+        break;
+      case FilterByDate.YEAR:
+        groupConfig = {
+          start: startOfYear(now),
+          end: endOfYear(now),
+          groupBy: "month",
+        };
+        break;
+      case FilterByDate.ALL:
+      default:
+        groupConfig = {
+          start: new Date(0),
+          end: new Date(),
+          groupBy: "year",
+        };
+        break;
+    }
+
+    const transactions = await db.transaction.findMany({
+      where: {
+        userId: session.user.id,
+        transactionDate: {
+          gte: groupConfig.start,
+          lte: groupConfig.end,
+        },
+      },
+    });
+
+    const groupedData = transactions.reduce((acc, transaction) => {
+      const transDate = new Date(transaction.transactionDate);
+      let periodKey: string;
+      let timestamp: Date;
+
+      switch (groupConfig.groupBy) {
+        case "hour":
+          periodKey = format(transDate, "HH:00");
+          timestamp = startOfHour(transDate);
+          break;
+        case "day":
+          periodKey = format(transDate, "dd/MM");
+          timestamp = startOfDay(transDate);
+          break;
+        case "month":
+          periodKey = format(transDate, "MM/yyyy");
+          timestamp = startOfMonth(transDate);
+          break;
+        case "year":
+          periodKey = format(transDate, "yyyy");
+          timestamp = startOfYear(transDate);
+          break;
+      }
+
+      if (!acc[periodKey]) {
+        acc[periodKey] = {
+          period: periodKey,
+          timestamp,
+          income: 0,
+          expense: 0,
+        };
+      }
+
+      if (transaction.type === TransactionType.INCOME) {
+        acc[periodKey].income++;
+      } else {
+        acc[periodKey].expense++;
+      }
+
+      return acc;
+    }, {} as Record<string, TransactionFrequencyGrouped>);
+
+    const result: TransactionFrequencyGrouped[] = Object.values(
+      groupedData
+    ).sort((a, b) => a.timestamp!.getTime() - b.timestamp!.getTime());
 
     return { success: true, data: result };
   } catch (e) {

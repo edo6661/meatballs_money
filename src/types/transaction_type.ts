@@ -54,3 +54,10 @@ export interface ProfitLossGrouped {
   profit: number;
   loss: number;
 }
+
+export interface TransactionFrequencyGrouped {
+  period: string;
+  timestamp?: Date;
+  income: number;
+  expense: number;
+}

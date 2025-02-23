@@ -1,13 +1,11 @@
 "use client"
 
-import { TrendingUp } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -19,71 +17,70 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-]
+import { TransactionFrequencyGrouped } from "@/types/transaction_type"
 
+// Ubah konfigurasi chart sesuai dengan data frekuensi transaksi
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
-  },
-  mobile: {
-    label: "Mobile",
+  income: {
+    label: "Income",
     color: "hsl(var(--chart-2))",
+  },
+  expense: {
+    label: "Expense",
+    color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig
 
-export default function BarChartStackedLegend() {
+export default function BarChartStackedLegend({
+  data,
+}: {
+  data: TransactionFrequencyGrouped[] | null
+}) {
+  // Format data untuk chart
+  const chartData = data?.map((item) => ({
+    period: item.period,
+    income: item.income,
+    expense: item.expense,
+    timestamp: item.timestamp
+
+  })) ?? []
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Bar Chart - Stacked + Legend</CardTitle>
-        <CardDescription>
-          Frekuensi Transaksi (kapan saja)
-        </CardDescription>
+        <CardDescription>Frekuensi Transaksi (kapan saja)</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
+          <BarChart data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="period"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
+            // Jika ingin memformat label (misalnya menampilkan singkatan), bisa gunakan tickFormatter
+            // tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
             <ChartLegend content={<ChartLegendContent />} />
             <Bar
-              dataKey="desktop"
+              dataKey="income"
               stackId="a"
-              fill="var(--color-desktop)"
+              fill="var(--color-income)"
               radius={[0, 0, 4, 4]}
             />
             <Bar
-              dataKey="mobile"
+              dataKey="expense"
               stackId="a"
-              fill="var(--color-mobile)"
+              fill="var(--color-expense)"
               radius={[4, 4, 0, 0]}
             />
           </BarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter>
+
     </Card>
   )
 }

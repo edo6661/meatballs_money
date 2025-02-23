@@ -6,7 +6,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -109,17 +108,7 @@ export default function StackedAreaChart({ data }: StackedAreaChartProps) {
           </AreaChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter>
-        <div className="flex items-center gap-2 leading-none text-muted-foreground">
-          {displayData.length > 0
-            ? `${format(displayData[0].timestamp!, "dd/MM/yyyy")} - ${format(
-              displayData[displayData.length - 1].timestamp!,
-              "dd/MM/yyyy"
-            )}`
-            : "No data"}
-        </div>
 
-      </CardFooter>
     </Card>
   );
 }
