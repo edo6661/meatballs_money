@@ -5,6 +5,7 @@ import { BaseResponse, PaginationResponse } from "@/types/response";
 import {
   FilterByDate,
   IncomeExpenseGrouped,
+  PlainTransaction,
   ProfitLossGrouped,
   TransactionFrequencyGrouped,
 } from "@/types/transaction_type";
@@ -58,6 +59,44 @@ export const getTransactions = async (): Promise<
     return {
       success: true,
       data: transactions,
+    };
+  } catch (e) {
+    return {
+      success: false,
+      message: "Something went wrong",
+      data: null,
+      error: e,
+    };
+  }
+};
+
+export const getTransactionById = async (
+  transactionId: string
+): Promise<BaseResponse<PlainTransaction>> => {
+  try {
+    const transaction = await db.transaction.findUnique({
+      where: {
+        id: transactionId,
+      },
+    });
+    if (!transaction) {
+      return {
+        success: true,
+        data: null,
+      };
+    }
+    const plainTransaction: PlainTransaction = {
+      ...transaction,
+      amount: transaction.amount.toString(),
+      createdAt: transaction.createdAt.toISOString(),
+      updatedAt: transaction.updatedAt.toISOString(),
+      transactionDate: transaction.transactionDate.toISOString(),
+    };
+
+    return {
+      success: true,
+      // ! karena hanya plain object yang boleh di kasih ke client component, jadi harus diubah dulu, decimal gaboleh
+      data: plainTransaction,
     };
   } catch (e) {
     return {

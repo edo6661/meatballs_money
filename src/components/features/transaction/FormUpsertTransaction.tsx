@@ -158,21 +158,23 @@ const FormUpsertTransaction = ({
 
           <div>
             <Label>{t("description")}</Label>
-            {descriptions.map((desc, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <Input
-                  type="text"
-                  name="description"
-                  value={desc}
-                  onChange={(e) => handleDescriptionChange(index, e)}
-                />
-                {descriptions.length > 1 && (
-                  <Button type="button" onClick={() => removeDescription(index)}>
-                    –
-                  </Button>
-                )}
-              </div>
-            ))}
+            <div className="space-y-4">
+              {descriptions.map((desc, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <Input
+                    type="text"
+                    name="description"
+                    value={desc}
+                    onChange={(e) => handleDescriptionChange(index, e)}
+                  />
+                  {descriptions.length > 1 && (
+                    <Button type="button" onClick={() => removeDescription(index)}>
+                      –
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
             <div className="flex md:flex-row flex-col gap-4 mt-4">
               <Button type="button" onClick={addDescription} className="w-full" variant="secondary">
                 Add Description
