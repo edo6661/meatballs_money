@@ -1,7 +1,7 @@
 import { BaseActionState } from "@/utils/common/action_state";
-import { Transaction } from "@prisma/client";
+import { Transaction, TransactionType } from "@prisma/client";
 
-export interface TransactionState extends BaseActionState {
+export interface TransactionErrorState extends BaseActionState {
   formErrors?: {
     type?: string[];
     amount?: string[];
@@ -19,6 +19,17 @@ export type PlainTransaction = Omit<
   createdAt: string;
   updatedAt: string;
   transactionDate: string;
+};
+export const initialFormDataTransaction: PlainTransaction = {
+  amount: "",
+  category: "",
+  description: [""],
+  type: TransactionType.INCOME,
+  userId: "",
+  createdAt: "",
+  updatedAt: "",
+  transactionDate: "",
+  id: "",
 };
 export enum FilterByDate {
   TODAY = "TODAY",

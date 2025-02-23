@@ -4,14 +4,14 @@ import { SHARED, TRANSACTION_VALIDATION } from "@/constants/il8n";
 import { handleActionError } from "@/utils/helper/handle_action_error";
 import db from "@/lib/prisma";
 import { getTransactionSchema } from "@/lib/zod/transation_schema";
-import { TransactionState } from "@/types/transaction_type";
+import { TransactionErrorState } from "@/types/transaction_type";
 import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 
 export const upsertTransaction = async (
-  prevState: TransactionState,
+  prevState: TransactionErrorState,
   formData: FormData
-): Promise<TransactionState> => {
+): Promise<TransactionErrorState> => {
   const t = await getTranslations(TRANSACTION_VALIDATION);
   const s = await getTranslations(SHARED);
   const type = formData.get("type");
@@ -29,6 +29,8 @@ export const upsertTransaction = async (
   const description = formData.getAll("description");
   const category = formData.get("category");
   const userId = formData.get("userId");
+
+  console.log("TYPE: ", type);
 
   const result = getTransactionSchema(t).safeParse({
     type: type,

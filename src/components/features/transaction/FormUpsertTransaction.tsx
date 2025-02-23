@@ -24,7 +24,6 @@ const FormUpsertTransaction = ({
   const t = useTranslations(TRANSACTION_FIELDS);
   const router = useRouter();
 
-  // Efek: tampilkan toast dan redirect jika ada pesan
   useEffect(() => {
     if (state.message) {
       createToast({ title: state.message });
@@ -32,12 +31,10 @@ const FormUpsertTransaction = ({
     }
   }, [state, router]);
 
-  // State untuk input deskripsi (array of string)
   const [descriptions, setDescriptions] = useState<string[]>(
     transaction?.description || [""]
   );
 
-  // Update state description jika ada perubahan di props transaction
   useEffect(() => {
     if (transaction?.description) {
       setDescriptions(transaction.description);
@@ -69,7 +66,6 @@ const FormUpsertTransaction = ({
   return (
     <div className="container flex flex-col gap-12">
       <form className="flex flex-col gap-4" action={create}>
-        {/* Jika transaction ada, berarti update, jadi sertakan hidden input untuk transactionId */}
         {transaction && (
           <input type="hidden" name="transactionId" value={transaction.id} />
         )}
@@ -125,9 +121,7 @@ const FormUpsertTransaction = ({
             id="transactionDate"
             defaultValue={
               transaction
-                ? new Date(transaction.transactionDate)
-                  .toISOString()
-                  .split("T")[0]
+                ? new Date(transaction.transactionDate).toISOString().slice(0, 16)
                 : ""
             }
           />
@@ -140,10 +134,6 @@ const FormUpsertTransaction = ({
           <label>{t("description")}</label>
           {descriptions.map((desc, index) => (
             <div key={index} className="flex items-center gap-2">
-              {/*
-                Pastikan nama input "description" sama,
-                agar FormData.getAll("description") dapat mengumpulkan semua nilai.
-              */}
               <input
                 type="text"
                 name="description"
