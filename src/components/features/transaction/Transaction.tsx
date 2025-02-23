@@ -14,7 +14,6 @@ const Transaction = async (
     return <div>Transaction not found</div>
   }
 
-  console.log(result.data)
 
   return (
     <WithUser

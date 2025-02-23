@@ -47,3 +47,10 @@ export interface IncomeExpenseGrouped extends IncomeExpenseAggregate {
   period: string;
   timestamp?: Date;
 }
+
+export interface ProfitLossGrouped {
+  period: string;
+  timestamp?: Date;
+  profit: number;
+  loss: number;
+}

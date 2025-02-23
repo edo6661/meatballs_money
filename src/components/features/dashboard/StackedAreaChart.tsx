@@ -17,13 +17,10 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import {
-  FilterByDate,
-  filterByDateDefaultValue,
+
   IncomeExpenseAggregate,
   IncomeExpenseGrouped,
 } from "@/types/transaction_type";
-import { SelectFilter } from "./SelectFilter";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 
 interface StackedAreaChartProps {
@@ -31,19 +28,6 @@ interface StackedAreaChartProps {
 }
 
 export default function StackedAreaChart({ data }: StackedAreaChartProps) {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { replace } = useRouter();
-
-  function handleSearch(term: FilterByDate) {
-    const params = new URLSearchParams(searchParams);
-    if (term) {
-      params.set('filter', term);
-    } else {
-      params.delete('filter');
-    }
-    replace(`${pathname}?${params.toString()}`);
-  }
 
 
   let displayData: IncomeExpenseGrouped[] = [];
@@ -85,14 +69,7 @@ export default function StackedAreaChart({ data }: StackedAreaChartProps) {
             Pengeluaran dan pendapatan all time
           </CardDescription>
         </div>
-        <div>
-          <SelectFilter
-            filter={
-              searchParams.get('filter') as FilterByDate || filterByDateDefaultValue
-            }
-            onChangeFilter={(val) => handleSearch(val)}
-          />
-        </div>
+
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

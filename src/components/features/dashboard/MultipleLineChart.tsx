@@ -17,39 +17,41 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-]
+import { ProfitLossGrouped } from "@/types/transaction_type"
 
+// Ubah konfigurasi chart sesuai dengan data profit & loss
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
-  },
-  mobile: {
-    label: "Mobile",
+  profit: {
+    label: "Profit",
     color: "hsl(var(--chart-2))",
+  },
+  loss: {
+    label: "Loss",
+    color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig
 
-export default function MultipleLineChart() {
+export default function MultipleLineChart({
+  data,
+}: {
+  data: ProfitLossGrouped[] | null
+}) {
+  // Format data untuk chart
+  const chartData = data?.map((item) => ({
+    period: item.period,
+    profit: item.profit,
+    loss: item.loss,
+  })) ?? []
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Line Chart - Multiple</CardTitle>
-        <CardDescription>
-          Keuntungan dan kerugian bulanan
-        </CardDescription>
+        <CardDescription>Keuntungan dan kerugian bulanan</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
           <LineChart
-            accessibilityLayer
             data={chartData}
             margin={{
               left: 12,
@@ -58,24 +60,25 @@ export default function MultipleLineChart() {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="period"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
+            // Opsional: bisa diformat jika ingin menampilkan singkatan
+            // tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <Line
-              dataKey="desktop"
+              dataKey="profit"
               type="monotone"
-              stroke="var(--color-desktop)"
+              stroke="var(--color-profit)"
               strokeWidth={2}
               dot={false}
             />
             <Line
-              dataKey="mobile"
+              dataKey="loss"
               type="monotone"
-              stroke="var(--color-mobile)"
+              stroke="var(--color-loss)"
               strokeWidth={2}
               dot={false}
             />
@@ -89,7 +92,7 @@ export default function MultipleLineChart() {
               Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
             </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              Showing total visitors for the last 6 months
+              Menampilkan keuntungan dan kerugian untuk periode yang dipilih
             </div>
           </div>
         </div>

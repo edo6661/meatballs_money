@@ -19,8 +19,8 @@ interface SelectFilterProps {
 export function SelectFilter({ filter, onChangeFilter }: SelectFilterProps) {
   return (
     <Select onValueChange={onChangeFilter} defaultValue={filter}>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a filter" />
+      <SelectTrigger >
+        <SelectValue placeholder="Select a filter date" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
