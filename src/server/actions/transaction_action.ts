@@ -30,8 +30,6 @@ export const upsertTransaction = async (
   const category = formData.get("category");
   const userId = formData.get("userId");
 
-  console.log("TYPE: ", type);
-
   const result = getTransactionSchema(t).safeParse({
     type: type,
     amount: +amount!,

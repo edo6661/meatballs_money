@@ -10,6 +10,9 @@ import { User } from "@prisma/client";
 import { PlainTransaction } from "@/types/transaction_type";
 import { useTranslations } from "next-intl";
 import { useActionState } from "react";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 type FormUpsertTransactionProps = {
   user: User;
@@ -45,6 +48,10 @@ const FormUpsertTransaction = ({
     setDescriptions((prev) => [...prev, ""]);
   };
 
+  const removeAllDescription = () => {
+    setDescriptions([""]);
+  }
+
   const removeDescription = (index: number) => {
     setDescriptions((prev) =>
       prev.length > 1 ? prev.filter((_, idx) => idx !== index) : prev
@@ -64,100 +71,120 @@ const FormUpsertTransaction = ({
   };
 
   return (
-    <div className="container flex flex-col gap-12">
-      <form className="flex flex-col gap-4" action={create}>
-        {transaction && (
-          <input type="hidden" name="transactionId" value={transaction.id} />
-        )}
-        <input type="hidden" name="userId" value={user.id} />
-        {state.formErrors?.userId?.map((error) => (
-          <ErrorInputField error={error} key={error} />
-        ))}
+    <Card className="container flex flex-col max-w-3xl">
+      <CardHeader>
+        <CardTitle>
+          {transaction ? "Update Transaction" : "Create Transaction"}
+        </CardTitle>
+        <CardDescription>
+          {transaction
+            ? "Update your transaction details"
+            : "Fill in the form to create a new transaction"}
 
-        <div>
-          <label htmlFor="type">{t("type")}</label>
-          <select
-            name="type"
-            id="type"
-            defaultValue={transaction?.type || "INCOME"}
-          >
-            <option value="INCOME">{t("income")}</option>
-            <option value="EXPENSE">{t("expense")}</option>
-          </select>
-          {state.formErrors?.type?.map((error) => (
+        </CardDescription>
+
+      </CardHeader>
+      <CardContent>
+        <form className="flex flex-col gap-4" action={create}>
+          {transaction && (
+            <Input type="hidden" name="transactionId" value={transaction.id} />
+          )}
+          <Input type="hidden" name="userId" value={user.id} />
+          {state.formErrors?.userId?.map((error) => (
             <ErrorInputField error={error} key={error} />
           ))}
-        </div>
 
-        <div>
-          <label htmlFor="amount">{t("amount")}</label>
-          <input
-            type="number"
-            name="amount"
-            id="amount"
-            defaultValue={transaction?.amount || ""}
-            required
-          />
-          {state.formErrors?.amount?.map((error) => (
-            <ErrorInputField error={error} key={error} />
-          ))}
-        </div>
+          <div>
+            <Label htmlFor="type">{t("type")}</Label>
+            <select
+              name="type"
+              id="type"
+              defaultValue={transaction?.type || "INCOME"}
+            >
+              <option value="INCOME">{t("income")}</option>
+              <option value="EXPENSE">{t("expense")}</option>
+            </select>
+            {state.formErrors?.type?.map((error) => (
+              <ErrorInputField error={error} key={error} />
+            ))}
+          </div>
 
-        <div>
-          <label htmlFor="category">{t("category")}</label>
-          <input
-            type="text"
-            name="category"
-            id="category"
-            defaultValue={transaction?.category || ""}
-          />
-        </div>
+          <div>
+            <Label htmlFor="amount">{t("amount")}</Label>
+            <Input
+              type="number"
+              name="amount"
+              id="amount"
+              defaultValue={transaction?.amount || ""}
+              required
+            />
+            {state.formErrors?.amount?.map((error) => (
+              <ErrorInputField error={error} key={error} />
+            ))}
+          </div>
 
-        <div>
-          <label htmlFor="transactionDate">{t("transactionDate")}</label>
-          <input
-            type="datetime-local"
-            name="transactionDate"
-            id="transactionDate"
-            defaultValue={
-              transaction
-                ? new Date(transaction.transactionDate).toISOString().slice(0, 16)
-                : ""
-            }
-          />
-          {state.formErrors?.transactionDate?.map((error) => (
-            <ErrorInputField error={error} key={error} />
-          ))}
-        </div>
+          <div>
+            <Label htmlFor="category">{t("category")}</Label>
+            <Input
+              type="text"
+              name="category"
+              id="category"
+              defaultValue={transaction?.category || ""}
+            />
+          </div>
 
-        <div>
-          <label>{t("description")}</label>
-          {descriptions.map((desc, index) => (
-            <div key={index} className="flex items-center gap-2">
-              <input
-                type="text"
-                name="description"
-                value={desc}
-                onChange={(e) => handleDescriptionChange(index, e)}
-              />
-              {descriptions.length > 1 && (
-                <Button type="button" onClick={() => removeDescription(index)}>
-                  –
-                </Button>
-              )}
+          <div>
+            <Label htmlFor="transactionDate">{t("transactionDate")}</Label>
+            <Input
+              type="datetime-local"
+              name="transactionDate"
+              id="transactionDate"
+              defaultValue={
+                transaction
+                  ? new Date(transaction.transactionDate).toISOString().slice(0, 16)
+                  : ""
+              }
+            />
+            {state.formErrors?.transactionDate?.map((error) => (
+              <ErrorInputField error={error} key={error} />
+            ))}
+          </div>
+
+          <div className="space-y-4">
+            <Label>{t("description")}</Label>
+            {descriptions.map((desc, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <Input
+                  type="text"
+                  name="description"
+                  value={desc}
+                  onChange={(e) => handleDescriptionChange(index, e)}
+                />
+                {descriptions.length > 1 && (
+                  <Button type="button" onClick={() => removeDescription(index)}>
+                    –
+                  </Button>
+                )}
+              </div>
+            ))}
+            <div className="flex md:flex-row flex-col gap-4">
+              <Button type="button" onClick={addDescription} className="w-full" variant="secondary">
+                Add Description
+              </Button>
+              <Button type="button" onClick={removeAllDescription} className="w-full" variant="destructive">
+                Remove Descriptions
+              </Button>
             </div>
-          ))}
-          <Button type="button" onClick={addDescription}>
-            +
-          </Button>
-          {state.formErrors?.description?.map((error) => (
-            <ErrorInputField error={error} key={error} />
-          ))}
-        </div>
+            {state.formErrors?.description?.map((error) => (
+              <ErrorInputField error={error} key={error} />
+            ))}
+          </div>
 
-        <Button disabled={isPending}>{t("submit")}</Button>
-      </form>
-    </div>
+          <Button disabled={isPending}>{t("submit")}</Button>
+        </form>
+      </CardContent>
+
+    </Card>
   );
 };
 

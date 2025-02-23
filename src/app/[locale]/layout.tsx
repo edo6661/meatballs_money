@@ -4,6 +4,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import Nav from '@/components/header/Nav';
 import { Toaster } from "@/components/ui/sonner"
+import { ThemeProvider } from '@/providers/ThemeProvider';
 
 
 
@@ -27,12 +28,23 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
+    <html lang={locale} suppressHydrationWarning>
       <body>
         <NextIntlClientProvider messages={messages}>
-          <Toaster />
-          <Nav />
-          {children}
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+
+          >
+            <Toaster />
+            <Nav />
+            {/* MIGHT DELETE LATER */}
+            <main className='mt-8'>
+              {children}
+            </main>
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>
