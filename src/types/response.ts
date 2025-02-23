@@ -4,3 +4,10 @@ export interface BaseResponse<T> {
   data: T | null;
   error?: unknown;
 }
+
+export interface PaginationResponse<T> extends BaseResponse<T[]> {
+  totalPage: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  currentPage: number;
+}

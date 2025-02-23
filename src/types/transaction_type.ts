@@ -31,6 +31,7 @@ export const initialFormDataTransaction: PlainTransaction = {
   transactionDate: "",
   id: "",
 };
+
 export enum FilterByDate {
   TODAY = "TODAY",
   WEEK = "WEEK",

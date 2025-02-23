@@ -1,7 +1,7 @@
 import { redirect } from "@/i18n/routing";
 import { auth } from "@/lib/auth";
 import db from "@/lib/prisma";
-import { BaseResponse } from "@/types/response";
+import { BaseResponse, PaginationResponse } from "@/types/response";
 import {
   FilterByDate,
   IncomeExpenseGrouped,
@@ -9,7 +9,7 @@ import {
   ProfitLossGrouped,
   TransactionFrequencyGrouped,
 } from "@/types/transaction_type";
-import { Transaction, TransactionType } from "@prisma/client";
+import { Prisma, Transaction, TransactionType } from "@prisma/client";
 import { Session } from "next-auth";
 import {
   startOfToday,
@@ -69,40 +69,96 @@ export const getTransactions = async (): Promise<
     };
   }
 };
-
-export const getTransactionById = async (
-  transactionId: string
-): Promise<BaseResponse<PlainTransaction>> => {
+export const getTransactionsInfiniteScrollAndFilter = async (
+  take: number = 12,
+  page: number = 1,
+  filter: FilterByDate,
+  type: TransactionType
+): Promise<PaginationResponse<Transaction>> => {
   try {
-    const transaction = await db.transaction.findUnique({
-      where: {
-        id: transactionId,
-      },
-    });
-    if (!transaction) {
-      return {
-        success: true,
-        data: null,
+    const session = await avoidUserNull();
+
+    // 1. Tentukan rentang tanggal berdasarkan filter
+    let startDate: Date | undefined;
+    let endDate: Date | undefined;
+    const today = new Date();
+
+    switch (filter) {
+      case FilterByDate.TODAY:
+        startDate = startOfToday();
+        endDate = endOfToday();
+        break;
+      case FilterByDate.WEEK:
+        startDate = startOfWeek(today);
+        endDate = endOfWeek(today);
+        break;
+      case FilterByDate.MONTH:
+        startDate = startOfMonth(today);
+        endDate = endOfMonth(today);
+        break;
+      case FilterByDate.YEAR:
+        startDate = startOfYear(today);
+        endDate = endOfYear(today);
+        break;
+      case FilterByDate.ALL:
+      default:
+        break;
+    }
+
+    // 2. Bangun where clause
+    const whereClause: Prisma.TransactionWhereInput = {
+      userId: session.user.id,
+      type: type,
+    };
+
+    if (filter !== FilterByDate.ALL) {
+      whereClause.transactionDate = {
+        ...(startDate && { gte: startDate }),
+        ...(endDate && { lte: endDate }),
       };
     }
-    const plainTransaction: PlainTransaction = {
-      ...transaction,
-      amount: transaction.amount.toString(),
-      createdAt: transaction.createdAt.toISOString(),
-      updatedAt: transaction.updatedAt.toISOString(),
-      transactionDate: transaction.transactionDate.toISOString(),
-    };
+
+    // 3. Hitung skip untuk pagination
+    const skip = (page - 1) * take;
+
+    // 4. Ambil data transaksi
+    const transactions = await db.transaction.findMany({
+      where: whereClause,
+      orderBy: {
+        updatedAt: "desc",
+      },
+      take,
+      skip,
+    });
+
+    // 5. Hitung total data
+    const total = await db.transaction.count({
+      where: whereClause,
+    });
+
+    // 6. Hitung informasi pagination
+    const totalPage = Math.ceil(total / take);
+    const hasNextPage = page < totalPage;
+    const hasPrevPage = page > 1;
 
     return {
       success: true,
-      // ! karena hanya plain object yang boleh di kasih ke client component, jadi harus diubah dulu, decimal gaboleh
-      data: plainTransaction,
+      data: transactions,
+      totalPage,
+      hasNextPage,
+      hasPrevPage,
+      currentPage: page,
+      error: null,
     };
   } catch (e) {
     return {
       success: false,
-      message: "Something went wrong",
+      message: "Gagal memuat transaksi",
       data: null,
+      totalPage: 0,
+      hasNextPage: false,
+      hasPrevPage: false,
+      currentPage: page,
       error: e,
     };
   }

@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { Transaction, TransactionType } from "@prisma/client";
 import { formatTransactionType } from "@/utils/format_transaction";
 import { formatRupiah } from "@/utils/format_currency";
+import FilterTransactions from "./FilterTransactions";
 
 
 
@@ -18,7 +19,9 @@ const getBorderBasedOnType = (type: TransactionType) => {
   return type === TransactionType.INCOME ? "border-green-200" : "border-red-200";
 }
 
-const Transactions = async () => {
+const Transactions = async (
+  { page }: { page: number }
+) => {
   const result = await getTransactions();
 
   if (!result.success) return <div>{result.message}</div>;
@@ -28,61 +31,66 @@ const Transactions = async () => {
   }
 
   return (
-    <div className="flex flex-wrap items-stretch gap-8 justify-center">
-      {result.data?.map((transaction) => (
-        <Card
-          key={transaction.id}
-          className={`relative overflow-hidden min-w-96 flex flex-col ${getBorderBasedOnType(transaction.type)} `}
-        >
+    <div className="container">
+      <FilterTransactions
+        page={page}
+      />
+      <div className="flex flex-wrap items-stretch gap-8 justify-center">
+        {result.data?.map((transaction) => (
+          <Card
+            key={transaction.id}
+            className={`relative overflow-hidden min-w-96 flex flex-col ${getBorderBasedOnType(transaction.type)} `}
+          >
 
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 justify-between">
-              <span className={`text-sm px-4 py-2 rounded-full ${getTypeStyle(transaction.type)}`}>
-                {formatTransactionType(transaction.type)}
-              </span>
-              <span>
-                {formatRupiah(Number(transaction.amount))}
-              </span>
-            </CardTitle>
-            <CardDescription className="text-lg font-semibold">
-              {format(new Date(transaction.transactionDate), "dd MMM yyyy, HH:mm")}
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 justify-between">
+                <span className={`text-sm px-4 py-2 rounded-full ${getTypeStyle(transaction.type)}`}>
+                  {formatTransactionType(transaction.type)}
+                </span>
+                <span>
+                  {formatRupiah(Number(transaction.amount))}
+                </span>
+              </CardTitle>
+              <CardDescription className="text-lg font-semibold">
+                {format(new Date(transaction.transactionDate), "dd MMM yyyy, HH:mm")}
 
-            </CardDescription>
-          </CardHeader>
+              </CardDescription>
+            </CardHeader>
 
-          <CardContent className="space-y-2 flex-grow">
-            {transaction.category && (
-              <div>
-                <span className="font-medium">Category:</span> {transaction.category}
+            <CardContent className="space-y-2 flex-grow">
+              {transaction.category && (
+                <div>
+                  <span className="font-medium">Category:</span> {transaction.category}
+                </div>
+              )}
+
+              {isDescriptionEmpty(transaction) && (
+                <div>
+                  <span className="font-medium">Descriptions:</span>
+                  {transaction.description.map((desc, i) => (
+                    <p key={i} className="text-sm text-muted-foreground">
+                      {desc}
+                    </p>
+                  ))}
+                </div>
+              )}
+
+              <div className="text-sm">
+                <p className="font-medium">Transaction Date:</p>
               </div>
-            )}
 
-            {isDescriptionEmpty(transaction) && (
-              <div>
-                <span className="font-medium">Descriptions:</span>
-                {transaction.description.map((desc, i) => (
-                  <p key={i} className="text-sm text-muted-foreground">
-                    {desc}
-                  </p>
-                ))}
+              <div className="text-sm text-muted-foreground">
+                <p>Created: {format(new Date(transaction.createdAt), "dd MMM yyyy")}</p>
+                <p>Updated: {format(new Date(transaction.updatedAt), "dd MMM yyyy")}</p>
               </div>
-            )}
+            </CardContent>
 
-            <div className="text-sm">
-              <p className="font-medium">Transaction Date:</p>
-            </div>
-
-            <div className="text-sm text-muted-foreground">
-              <p>Created: {format(new Date(transaction.createdAt), "dd MMM yyyy")}</p>
-              <p>Updated: {format(new Date(transaction.updatedAt), "dd MMM yyyy")}</p>
-            </div>
-          </CardContent>
-
-          <CardFooter className="flex justify-end">
-            <BtnActionTransaction id={transaction.id} />
-          </CardFooter>
-        </Card>
-      ))}
+            <CardFooter className="flex justify-end">
+              <BtnActionTransaction id={transaction.id} />
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 };

@@ -177,7 +177,9 @@ const FormUpsertTransaction = ({
               <Button type="button" onClick={addDescription} className="w-full" variant="secondary">
                 Add Description
               </Button>
-              <Button type="button" onClick={removeAllDescription} className="w-full" variant="destructive">
+              <Button type="button" onClick={removeAllDescription} className="w-full" variant="destructive"
+                disabled={descriptions.length === 1}
+              >
                 Remove Descriptions
               </Button>
             </div>
