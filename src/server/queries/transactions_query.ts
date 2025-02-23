@@ -5,7 +5,6 @@ import { BaseResponse, PaginationResponse } from "@/types/response";
 import {
   FilterByDate,
   IncomeExpenseGrouped,
-  PlainTransaction,
   ProfitLossGrouped,
   TransactionFrequencyGrouped,
 } from "@/types/transaction_type";
