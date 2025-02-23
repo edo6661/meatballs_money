@@ -1,8 +1,16 @@
 {
   "Shared": {
     "error": {
-      "somethingWentWrong": "Ada yang salah, silakan coba lagi nanti"
-    }
+      "somethingWentWrong": "Terjadi kesalahan, silakan coba lagi nanti"
+    },
+    "income": "Pemasukan",
+    "and": "dan",
+    "expense": "Pengeluaran",
+    "allTime": "Sepanjang Waktu",
+    "profit": "Keuntungan",
+    "loss": "Kerugian",
+    "frequency": "Frekuensi",
+    "transaction": "Transaksi"
   },
   "HomePage": {
     "title": "Halo Dunia!",

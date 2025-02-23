@@ -13,6 +13,7 @@ import { useActionState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type FormUpsertTransactionProps = {
   user: User;
@@ -96,17 +97,22 @@ const FormUpsertTransaction = ({
 
           <div>
             <Label htmlFor="type">{t("type")}</Label>
-            <select
+            <Select
               name="type"
-              id="type"
               defaultValue={transaction?.type || "INCOME"}
             >
-              <option value="INCOME">{t("income")}</option>
-              <option value="EXPENSE">{t("expense")}</option>
-            </select>
+              <SelectTrigger id="type">
+                <SelectValue placeholder="Pilih tipe" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="INCOME">{t("income")}</SelectItem>
+                <SelectItem value="EXPENSE">{t("expense")}</SelectItem>
+              </SelectContent>
+            </Select>
             {state.formErrors?.type?.map((error) => (
               <ErrorInputField error={error} key={error} />
             ))}
+
           </div>
 
           <div>
@@ -150,7 +156,7 @@ const FormUpsertTransaction = ({
             ))}
           </div>
 
-          <div className="space-y-4">
+          <div>
             <Label>{t("description")}</Label>
             {descriptions.map((desc, index) => (
               <div key={index} className="flex items-center gap-2">
@@ -167,7 +173,7 @@ const FormUpsertTransaction = ({
                 )}
               </div>
             ))}
-            <div className="flex md:flex-row flex-col gap-4">
+            <div className="flex md:flex-row flex-col gap-4 mt-4">
               <Button type="button" onClick={addDescription} className="w-full" variant="secondary">
                 Add Description
               </Button>

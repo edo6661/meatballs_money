@@ -19,7 +19,7 @@ const BtnActionTransaction = ({
   };
 
   return (
-    <div>
+    <div className='space-x-4'>
       <Button
         onClick={() => {
           router.push({

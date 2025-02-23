@@ -2,8 +2,17 @@
   "Shared": {
     "error": {
       "somethingWentWrong": "Something went wrong, please try again later"
-    }
+    },
+    "income": "Income",
+    "and": "and",
+    "expense": "Expense",
+    "allTime": "All Time",
+    "profit": "Profit",
+    "loss": "Loss",
+    "frequency": "Frequency",
+    "transaction": "Transaction"
   },
+
   "HomePage": {
     "title": "Hello world!",
     "welcome": {
