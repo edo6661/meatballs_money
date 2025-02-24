@@ -20,6 +20,10 @@
     "about": "Pergi ke tentang halaman"
   },
   "TransactionPage": {
+    "createFormDescription": "Isi formulir untuk membuat transaksi baru",
+    "updateFormDescription": "Isi formulir untuk memperbarui transaksi",
+    "addDescription": "Tambahkan Deskripsi",
+    "removeDescriptions": "Hapus Deskripsi",
     "action": {
       "create": "Buat",
       "edit": "Edit",

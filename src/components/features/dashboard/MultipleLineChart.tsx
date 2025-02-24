@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/chart"
 import { ProfitLossGrouped } from "@/types/transaction_type"
 import { useTranslations } from "next-intl"
+import { SHARED } from "@/constants/il8n"
 
 // Ubah konfigurasi chart sesuai dengan data profit & loss
 const chartConfig = {
@@ -42,7 +43,7 @@ export default function MultipleLineChart({
     loss: item.loss,
     timestamp: item.timestamp,
   })) ?? []
-  const t = useTranslations("Shared")
+  const t = useTranslations(SHARED)
 
 
   return (

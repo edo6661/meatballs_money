@@ -2,7 +2,7 @@
 import React, { useEffect, useState, ChangeEvent } from "react";
 import ErrorInputField from "@/components/shared/ErrorInputField";
 import { Button } from "@/components/ui/button";
-import { TRANSACTION_FIELDS } from "@/constants/il8n";
+import { SHARED, TRANSACTION_ACTION, TRANSACTION_FIELDS, TRANSACTION_PAGE } from "@/constants/il8n";
 import { useRouter } from "@/i18n/routing";
 import { upsertTransaction } from "@/server/actions/transaction_action";
 import createToast from "@/utils/create_toast";
@@ -26,6 +26,9 @@ const FormUpsertTransaction = ({
 }: FormUpsertTransactionProps) => {
   const [state, create, isPending] = useActionState(upsertTransaction, {});
   const t = useTranslations(TRANSACTION_FIELDS);
+  const tr = useTranslations(TRANSACTION_PAGE);
+  const a = useTranslations(TRANSACTION_ACTION);
+  const s = useTranslations(SHARED);
   const router = useRouter();
 
   useEffect(() => {
@@ -75,12 +78,12 @@ const FormUpsertTransaction = ({
     <Card className="container flex flex-col max-w-3xl">
       <CardHeader>
         <CardTitle>
-          {transaction ? "Update Transaction" : "Create Transaction"}
+          {transaction ? `${a("update")} ${s("transaction")}` : `${a("create")} ${s("transaction")}`}
         </CardTitle>
         <CardDescription>
           {transaction
-            ? "Update your transaction details"
-            : "Fill in the form to create a new transaction"}
+            ? tr("updateFormDescription")
+            : tr("createFormDescription")}
 
         </CardDescription>
 
@@ -177,12 +180,12 @@ const FormUpsertTransaction = ({
             </div>
             <div className="flex md:flex-row flex-col gap-4 mt-4">
               <Button type="button" onClick={addDescription} className="w-full" variant="secondary">
-                Add Description
+                {tr("addDescription")}
               </Button>
               <Button type="button" onClick={removeAllDescription} className="w-full" variant="destructive"
                 disabled={descriptions.length === 1}
               >
-                Remove Descriptions
+                {tr("removeDescriptions")}
               </Button>
             </div>
             {state.formErrors?.description?.map((error) => (

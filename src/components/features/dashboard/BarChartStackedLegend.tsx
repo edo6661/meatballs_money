@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/chart"
 import { TransactionFrequencyGrouped } from "@/types/transaction_type"
 import { useTranslations } from "next-intl"
+import { SHARED } from "@/constants/il8n"
 
 // Ubah konfigurasi chart sesuai dengan data frekuensi transaksi
 const chartConfig = {
@@ -45,7 +46,7 @@ export default function BarChartStackedLegend({
     timestamp: item.timestamp
 
   })) ?? []
-  const t = useTranslations("Shared")
+  const t = useTranslations(SHARED)
 
   return (
     <Card>

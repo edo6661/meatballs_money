@@ -21,6 +21,10 @@
     "about": "Go to the about page"
   },
   "TransactionPage": {
+    "createFormDescription": "Fill in the form to create a new transaction",
+    "updateFormDescription": "Fill in the form to update the transaction",
+    "addDescription": "Add Description",
+    "removeDescriptions": "Remove Descriptions",
     "action": {
       "create": "Create",
       "edit": "Edit",

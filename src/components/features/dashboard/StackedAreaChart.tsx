@@ -22,13 +22,14 @@ import {
 } from "@/types/transaction_type";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
+import { SHARED } from "@/constants/il8n";
 
 interface StackedAreaChartProps {
   data: IncomeExpenseAggregate | IncomeExpenseGrouped[] | null;
 }
 
 export default function StackedAreaChart({ data }: StackedAreaChartProps) {
-  const t = useTranslations("Shared")
+  const t = useTranslations(SHARED)
 
 
   let displayData: IncomeExpenseGrouped[] = [];
