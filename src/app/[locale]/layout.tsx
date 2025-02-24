@@ -41,9 +41,10 @@ export default async function LocaleLayout({
             <Toaster />
             <Nav />
             {/* MIGHT DELETE LATER */}
-            <main className='mt-8'>
+            <main className='my-8'>
               {children}
             </main>
+
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

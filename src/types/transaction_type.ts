@@ -73,3 +73,13 @@ export interface TransactionFrequencyGrouped {
   income: number;
   expense: number;
 }
+
+export const isValidFilter = (value: string): value is FilterByDate =>
+  Object.values(FilterByDate).includes(value as FilterByDate);
+
+export const isValidTransactionType = (
+  value: string | null
+): value is TransactionType => {
+  if (!value) return true;
+  return Object.values(TransactionType).includes(value as TransactionType);
+};

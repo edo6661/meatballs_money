@@ -107,11 +107,12 @@ export const getTransactionById = async (
     };
   }
 };
+
 export const getTransactionsInfiniteScrollAndFilter = async (
   take: number = 12,
   page: number = 1,
   filter: FilterByDate,
-  type: TransactionType
+  type: TransactionType | null
 ): Promise<PaginationResponse<Transaction>> => {
   try {
     const session = await avoidUserNull();
@@ -146,7 +147,7 @@ export const getTransactionsInfiniteScrollAndFilter = async (
     // 2. Bangun where clause
     const whereClause: Prisma.TransactionWhereInput = {
       userId: session.user.id,
-      type: type,
+      ...(type && { type }),
     };
 
     if (filter !== FilterByDate.ALL) {
@@ -173,11 +174,14 @@ export const getTransactionsInfiniteScrollAndFilter = async (
     const total = await db.transaction.count({
       where: whereClause,
     });
+    // console.log("TOTAL TRANSACTIONS:", total);
 
     // 6. Hitung informasi pagination
     const totalPage = Math.ceil(total / take);
     const hasNextPage = page < totalPage;
     const hasPrevPage = page > 1;
+
+    // console.log("TOTAL PAGE:", totalPage);
 
     return {
       success: true,
