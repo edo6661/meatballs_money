@@ -18,6 +18,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import { TransactionFrequencyGrouped } from "@/types/transaction_type"
+import { useTranslations } from "next-intl"
 
 // Ubah konfigurasi chart sesuai dengan data frekuensi transaksi
 const chartConfig = {
@@ -44,12 +45,19 @@ export default function BarChartStackedLegend({
     timestamp: item.timestamp
 
   })) ?? []
+  const t = useTranslations("Shared")
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Bar Chart - Stacked + Legend</CardTitle>
-        <CardDescription>Frekuensi Transaksi (kapan saja)</CardDescription>
+        <CardTitle>
+          {t("frequency") + " " + t("transaction")}
+
+        </CardTitle>
+        <CardDescription>
+          {t("frequency") + " " + t("transaction") + " " + t("allTime")}
+
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

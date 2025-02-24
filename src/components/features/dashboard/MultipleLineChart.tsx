@@ -16,6 +16,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import { ProfitLossGrouped } from "@/types/transaction_type"
+import { useTranslations } from "next-intl"
 
 // Ubah konfigurasi chart sesuai dengan data profit & loss
 const chartConfig = {
@@ -41,12 +42,18 @@ export default function MultipleLineChart({
     loss: item.loss,
     timestamp: item.timestamp,
   })) ?? []
+  const t = useTranslations("Shared")
+
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Line Chart - Multiple</CardTitle>
-        <CardDescription>Keuntungan dan kerugian bulanan</CardDescription>
+        <CardTitle>
+          {t("profit") + " " + t("and") + " " + t("loss")}
+        </CardTitle>
+        <CardDescription>
+          {t("profit") + " " + t("and") + " " + t("loss") + " " + t("allTime")}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

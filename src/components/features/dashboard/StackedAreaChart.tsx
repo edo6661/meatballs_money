@@ -21,12 +21,14 @@ import {
   IncomeExpenseGrouped,
 } from "@/types/transaction_type";
 import { format } from "date-fns";
+import { useTranslations } from "next-intl";
 
 interface StackedAreaChartProps {
   data: IncomeExpenseAggregate | IncomeExpenseGrouped[] | null;
 }
 
 export default function StackedAreaChart({ data }: StackedAreaChartProps) {
+  const t = useTranslations("Shared")
 
 
   let displayData: IncomeExpenseGrouped[] = [];
@@ -50,11 +52,11 @@ export default function StackedAreaChart({ data }: StackedAreaChartProps) {
   // Konfigurasi chart untuk key income dan expense
   const chartConfig: ChartConfig = {
     income: {
-      label: "Income",
+      label: t("income"),
       color: "hsl(var(--chart-income, 120, 100%, 50%))",
     },
     expense: {
-      label: "Expense",
+      label: t("expense"),
       color: "hsl(var(--chart-expense, 0, 100%, 50%))",
     },
   };
@@ -63,9 +65,11 @@ export default function StackedAreaChart({ data }: StackedAreaChartProps) {
     <Card>
       <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between">
         <div>
-          <CardTitle>Pengeluaran dan Pendapatan</CardTitle>
+          <CardTitle>
+            {t("income") + " " + t("and") + " " + t("expense")}
+          </CardTitle>
           <CardDescription>
-            Pengeluaran dan pendapatan all time
+            {t("income") + " " + t("and") + " " + t("expense") + " " + t("allTime")}
           </CardDescription>
         </div>
 
