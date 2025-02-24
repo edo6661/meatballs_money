@@ -1,6 +1,8 @@
 "use client"
 import ErrorInputField from '@/components/shared/ErrorInputField'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { LOGIN } from '@/constants/il8n'
 import { useRouter } from '@/i18n/routing'
 import { login } from '@/server/actions/auth_action'
@@ -31,11 +33,11 @@ const LoginPage = () => {
 
 
 
-        <div>
-          <label htmlFor="email">
+        <div className="space-y-2">
+          <Label htmlFor="email">
             {t('email')}
-          </label>
-          <input type="email" name="email" id="email" />
+          </Label>
+          <Input type="email" name="email" id="email" />
           {state.formErrors?.email?.map((error) => (
             <ErrorInputField
               error={error}
@@ -44,11 +46,11 @@ const LoginPage = () => {
           ))
           }
         </div>
-        <div>
-          <label htmlFor="password">
+        <div className="space-y-2">
+          <Label htmlFor="password">
             {t('password')}
-          </label>
-          <input type="password" name="password" id="password" />
+          </Label>
+          <Input type="password" name="password" id="password" />
           {state.formErrors?.password?.map((error) => (
             <ErrorInputField
               error={error}

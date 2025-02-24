@@ -5,9 +5,11 @@ import { format } from "date-fns";
 import { formatTransactionType } from "@/utils/format_transaction";
 import { formatRupiah } from "@/utils/format_currency";
 import { Transaction, TransactionType } from '@prisma/client';
+import { getTranslations } from 'next-intl/server';
+import { TRANSACTION_PAGE } from '@/constants/il8n';
 
 
-const TransactionGridItem = (
+const TransactionGridItem = async (
   {
     amount,
     category,
@@ -32,6 +34,7 @@ const TransactionGridItem = (
   const isDescriptionEmpty = (description: string[]) => {
     return description.length === 0 && description[0] !== "";
   }
+  const t = await getTranslations(TRANSACTION_PAGE)
 
   return (
     <Card
@@ -56,13 +59,13 @@ const TransactionGridItem = (
       <CardContent className="space-y-2 flex-grow">
         {category && (
           <div>
-            <span className="font-medium">Category:</span> {category}
+            <span className="font-medium">{t("category")}:</span> {category}
           </div>
         )}
 
         {isDescriptionEmpty(description) && (
           <div>
-            <span className="font-medium">Descriptions:</span>
+            <span className="font-medium">{t("descriptions")}:</span>
             {description.map((desc, i) => (
               <p key={i} className="text-sm text-muted-foreground">
                 {desc}
@@ -72,12 +75,12 @@ const TransactionGridItem = (
         )}
 
         <div className="text-sm">
-          <p className="font-medium">Transaction Date:</p>
+          <p className="font-medium">{t("transactionDate")}:</p>
         </div>
 
         <div className="text-sm text-muted-foreground">
-          <p>Created: {format(new Date(createdAt), "dd MMM yyyy")}</p>
-          <p>Updated: {format(new Date(updatedAt), "dd MMM yyyy")}</p>
+          <p>{t("createdAt")}: {format(new Date(createdAt), "dd MMM yyyy")}</p>
+          <p>{t("updatedAt")}: {format(new Date(updatedAt), "dd MMM yyyy")}</p>
         </div>
       </CardContent>
 

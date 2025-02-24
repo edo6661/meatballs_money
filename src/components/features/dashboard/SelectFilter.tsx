@@ -10,6 +10,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { FilterByDate, filterByDateOptions } from "@/types/transaction_type";
+import { useTranslations } from "next-intl";
+import { TRANSACTION_PAGE } from "@/constants/il8n";
 
 interface SelectFilterProps {
   filter: FilterByDate;
@@ -17,14 +19,15 @@ interface SelectFilterProps {
 }
 
 export function SelectFilter({ filter, onChangeFilter }: SelectFilterProps) {
+  const t = useTranslations(TRANSACTION_PAGE)
   return (
     <Select onValueChange={onChangeFilter} defaultValue={filter}>
       <SelectTrigger >
-        <SelectValue placeholder="Select a filter date" />
+        <SelectValue placeholder={t("selectFilterDate")} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Filter Date</SelectLabel>
+          <SelectLabel>{t("filterDate")}</SelectLabel>
           {filterByDateOptions.map((item) => (
             <SelectItem key={item.value} value={item.value}>
               {item.label}

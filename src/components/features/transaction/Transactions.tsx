@@ -5,12 +5,15 @@ import { FilterByDate, TransactionTypeWithAll, TransactionView } from "@/types/t
 import PaginationTransaction from "./PaginationTransaction";
 import TransactionTableItem from "./TransactionTableItem";
 import TransactionGridItem from "./TransactionGridItem";
+import { getTranslations } from "next-intl/server";
+import { TRANSACTION_PAGE } from "@/constants/il8n";
 
 
 
 const Transactions = async (
   { page, take, type, filter, view }: { page: number, take: number, type: TransactionTypeWithAll, filter: FilterByDate, view: TransactionView }
 ) => {
+  const t = await getTranslations(TRANSACTION_PAGE)
   const result = await getTransactionsInfiniteScrollAndFilter(
     take,
     page,
@@ -19,7 +22,7 @@ const Transactions = async (
   );
 
   if (!result.success) return <div>{result.message}</div>;
-  if (result.data?.length === 0 || !result.data) return <div>No transactions found</div>;
+  if (result.data?.length === 0 || !result.data) return <div>{t("notFound")}</div>;
 
 
   const onlyHasOnePage = result.totalPage == 1 && result.hasNextPage == false && result.hasPrevPage == false;

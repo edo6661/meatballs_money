@@ -1,6 +1,8 @@
 "use client"
 import ErrorInputField from '@/components/shared/ErrorInputField'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { REGISTER } from '@/constants/il8n'
 import { useRouter } from '@/i18n/routing'
 import { register } from '@/server/actions/auth_action'
@@ -25,15 +27,15 @@ const RegisterPage = () => {
 
 
   return (
-    <div className='container flex flex-col gap-12'>
+    <div className='container flex flex-col gap-12 max-w-xl'>
       <form className='flex flex-col gap-4' action={signUp}>
 
 
-        <div>
-          <label htmlFor="name">
+        <div className="space-y-2">
+          <Label htmlFor="name">
             {t('name')}
-          </label>
-          <input type="text" name="name" id="name" />
+          </Label>
+          <Input type="text" name="name" id="name" />
           {state.formErrors?.name?.map((error) => (
             <ErrorInputField
               error={error}
@@ -42,11 +44,11 @@ const RegisterPage = () => {
           ))
           }
         </div>
-        <div>
-          <label htmlFor="email">
+        <div className="space-y-2">
+          <Label htmlFor="email">
             {t('email')}
-          </label>
-          <input type="email" name="email" id="email" />
+          </Label>
+          <Input type="email" name="email" id="email" />
           {state.formErrors?.email?.map((error) => (
             <ErrorInputField
               error={error}
@@ -55,11 +57,11 @@ const RegisterPage = () => {
           ))
           }
         </div>
-        <div>
-          <label htmlFor="password">
+        <div className="space-y-2">
+          <Label htmlFor="password">
             {t('password')}
-          </label>
-          <input type="password" name="password" id="password" />
+          </Label>
+          <Input type="password" name="password" id="password" />
           {state.formErrors?.password?.map((error) => (
             <ErrorInputField
               error={error}
@@ -68,11 +70,11 @@ const RegisterPage = () => {
           ))
           }
         </div>
-        <div>
-          <label htmlFor="confirmPassword">
+        <div className="space-y-2">
+          <Label htmlFor="confirmPassword">
             {t('confirmPassword')}
-          </label>
-          <input type="password" name="confirmPassword" id="confirmPassword" />
+          </Label>
+          <Input type="password" name="confirmPassword" id="confirmPassword" />
           {state.formErrors?.confirmPassword?.map((error) => (
             <ErrorInputField
               error={error}

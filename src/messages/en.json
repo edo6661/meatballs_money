@@ -54,7 +54,23 @@
     "type": "Type",
     "view": "View",
     "invalidFilter": "Invalid filter",
-    "allowedValue": "Values that are allowed"
+    "allowedValue": "Values that are allowed: ",
+    "notFound": "Transaction not found",
+
+    "typeOf": "Type of Transactions",
+    "viewOf": "View of Transactions",
+    "selectFilterDate": "Select a filter date",
+    "filterDate": "Filter Date",
+
+    "category": "Category",
+    "descriptions": "Descriptions",
+    "transactionDate": "Transaction Date",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At",
+    "listTransactions": "A list of your transactions.",
+    "date": "Date",
+    "amount": "Amount",
+    "actionTable": "Action"
   },
   "AuthPage": {
     "register": {

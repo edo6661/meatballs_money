@@ -14,8 +14,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { TRANSACTION_PAGE } from '@/constants/il8n';
+import { getTranslations } from 'next-intl/server';
 
-const TransactionTableItem = ({ transactions }: { transactions: Transaction[] }) => {
+const TransactionTableItem = async ({ transactions }: { transactions: Transaction[] }) => {
+  const t = await getTranslations(TRANSACTION_PAGE);
 
   const getTypeStyle = (type: TransactionType) => {
     return type === TransactionType.INCOME
@@ -25,15 +28,15 @@ const TransactionTableItem = ({ transactions }: { transactions: Transaction[] })
 
   return (
     <Table>
-      <TableCaption>A list of your transactions.</TableCaption>
+      <TableCaption>{t("listTransactions")}</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead>Date</TableHead>
-          <TableHead>Type</TableHead>
-          <TableHead>Category</TableHead>
-          <TableHead>Description</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
-          <TableHead>Action</TableHead>
+          <TableHead>{t("date")}</TableHead>
+          <TableHead>{t("type")}</TableHead>
+          <TableHead>{t("category")}</TableHead>
+          <TableHead>{t("descriptions")}</TableHead>
+          <TableHead className="text-right">{t("amount")}</TableHead>
+          <TableHead>{t("actionTable")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

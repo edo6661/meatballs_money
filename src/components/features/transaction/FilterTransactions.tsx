@@ -4,6 +4,8 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 import { SelectFilter } from '../dashboard/SelectFilter'
 import { SelectOption } from '@/components/shared/SelectOption'
+import { useTranslations } from 'next-intl'
+import { SHARED, TRANSACTION_PAGE } from '@/constants/il8n'
 
 const FilterTransactions = (
   { type, filter, view }: { type: TransactionTypeWithAll, filter: FilterByDate, view: TransactionView }
@@ -40,6 +42,9 @@ const FilterTransactions = (
     replace(`${pathname}?${params.toString()}`);
   }
 
+  const t = useTranslations(TRANSACTION_PAGE)
+  const s = useTranslations(SHARED)
+
   return (
     <div className='flex items-center gap-8'>
       <SelectFilter
@@ -51,21 +56,21 @@ const FilterTransactions = (
       <SelectOption
         options={filterByTransactionTypeOptions}
         defaultValue={type}
-        label='Transaction Type'
+        label={`${s("transaction")} ${t("type")}`}
         onValueChange={
           (type) => handleType(type)
         }
-        placeholder="Type of Transactions"
+        placeholder={t("typeOf")}
 
       />
       <SelectOption
         options={transactionViewOptions}
         defaultValue={view}
-        label='Transactions View'
+        label={t("viewOf")}
         onValueChange={
           (view) => handleView(view)
         }
-        placeholder="View of Transactions"
+        placeholder={t("viewOf")}
 
       />
     </div>

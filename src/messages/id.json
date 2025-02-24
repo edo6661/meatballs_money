@@ -53,7 +53,21 @@
     "type": "Tipe",
     "view": "Lihat",
     "invalidFilter": "Filter tidak valid",
-    "allowedValue": "Nilai yang diizinkan: "
+    "allowedValue": "Nilai yang diizinkan: ",
+    "notFound": "Transaksi tidak ditemukan",
+    "typeOf": "Tipe transaksi",
+    "viewOf": "Opsi lihat transaksi",
+    "selectFilterDate": "Pilih tanggal filter",
+    "filterDate": "Tanggal Filter",
+    "category": "Kategori",
+    "descriptions": "Deskripsi",
+    "transactionDate": "Tanggal Transaksi",
+    "createdAt": "Dibuat Pada",
+    "updatedAt": "Diperbarui Pada",
+    "listTransactions": "Daftar transaksi Anda.",
+    "date": "Tanggal",
+    "amount": "Jumlah",
+    "actionTable": "Aksi"
   },
   "AuthPage": {
     "register": {
