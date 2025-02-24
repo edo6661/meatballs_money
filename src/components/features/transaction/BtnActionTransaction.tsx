@@ -2,12 +2,15 @@
 import { Button } from '@/components/ui/button'
 import { Pathnames, useRouter } from '@/i18n/routing'
 import { deleteTransaction } from '@/server/actions/transaction_action'
+import { Pencil, Trash } from 'lucide-react'
 import React, { useTransition } from 'react'
 
 const BtnActionTransaction = ({
-  id
+  id,
+  isTable = false
 }: {
-  id: string
+  id: string,
+  isTable?: boolean
 }) => {
   const router = useRouter()
   const [isPending, startTransition] = useTransition();
@@ -19,25 +22,50 @@ const BtnActionTransaction = ({
   };
 
   return (
-    <div className='space-x-4'>
-      <Button
-        onClick={() => {
-          router.push({
-            pathname: '/transactions/[transactionId]' as Pathnames,
-            params: { transactionId: id }
-          })
-        }}
-        disabled={isPending}
-      >
-        Detail
-      </Button>
-      <Button
-        onClick={handleDelete}
-        disabled={isPending}
-        variant="destructive"
-      >
-        Delete
-      </Button>
+    <div className='flex flex-wrap items-center justify-center gap-2'>
+      {!isTable && <>
+        <Button
+          onClick={() => {
+            router.push({
+              pathname: '/transactions/[transactionId]' as Pathnames,
+              params: { transactionId: id }
+            })
+          }}
+          disabled={isPending}
+        >
+          Edit
+        </Button>
+        <Button
+          onClick={handleDelete}
+          disabled={isPending}
+          variant="destructive"
+        >
+          Delete
+        </Button>
+      </>}
+
+      {isTable && (
+        <>
+          <Button
+            onClick={() => {
+              router.push({
+                pathname: '/transactions/[transactionId]' as Pathnames,
+                params: { transactionId: id }
+              })
+            }}
+            disabled={isPending}
+          >
+            <Pencil />
+          </Button>
+          <Button
+            onClick={handleDelete}
+            disabled={isPending}
+            variant="destructive"
+          >
+            <Trash />
+          </Button>
+        </>
+      )}
     </div>
   )
 }

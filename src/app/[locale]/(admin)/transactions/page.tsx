@@ -1,5 +1,6 @@
 import Transactions from '@/components/features/transaction/Transactions'
-import { FilterByDate, isValidFilter, isValidTransactionType } from '@/types/transaction_type';
+import ValidationErrorSearchParams from '@/components/features/transaction/ValidationErrorSearchParams';
+import { FilterByDate, isValidFilter, isValidTransactionType, isValidViewType, TransactionTypeWithAll, TransactionView } from '@/types/transaction_type';
 import { TransactionType } from '@prisma/client';
 import React, { Suspense } from 'react'
 
@@ -10,6 +11,7 @@ const TransactionsPage = async (
       filter?: string;
       limit?: string;
       type?: string;
+      view?: string;
     }>;
   }
 ) => {
@@ -17,26 +19,38 @@ const TransactionsPage = async (
   const page = searchParams?.page ? parseInt(searchParams.page) : 1;
   const take = searchParams?.limit ? parseInt(searchParams.limit) : 12;
   const filter = searchParams?.filter ? searchParams.filter : FilterByDate.ALL;
-  const type = searchParams?.type ? searchParams.type : null;
+  const type = searchParams?.type ? searchParams.type : TransactionTypeWithAll.ALL;
+  const view = searchParams?.view ? searchParams.view : TransactionView.GRID;
 
 
   if (!isValidFilter(filter)) {
     return (
-      <div>
-        <h2>Error</h2>
-        <p>Filter tidak valid. Nilai yang diperbolehkan: {Object.values(FilterByDate).join(", ")}</p>
-      </div>
+      <ValidationErrorSearchParams
+        errorLabel="Filter"
+        allowedValues={Object.values(FilterByDate)}
+      />
     );
   }
 
   if (!isValidTransactionType(type)) {
     return (
-      <div>
-        <h2>Error</h2>
-        <p>Transaction type tidak valid. Nilai yang diperbolehkan: {Object.values(TransactionType).join(", ")}</p>
-      </div>
+      <ValidationErrorSearchParams
+        errorLabel="Transaction type"
+        allowedValues={Object.values(TransactionType)}
+      />
     );
   }
+
+  if (!isValidViewType(view)) {
+    return (
+      <ValidationErrorSearchParams
+        errorLabel="View type"
+        allowedValues={Object.values(TransactionView)}
+      />
+    );
+  }
+
+
 
 
   return (
@@ -46,7 +60,8 @@ const TransactionsPage = async (
           page={page}
           take={take}
           filter={filter as FilterByDate}
-          type={type as TransactionType}
+          type={type as TransactionTypeWithAll}
+          view={view as TransactionView}
 
         />
       </Suspense>

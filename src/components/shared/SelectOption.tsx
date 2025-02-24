@@ -14,7 +14,7 @@ interface SelectOptionProps {
   onValueChange: (value: string) => void;
   defaultValue: string;
   label: string;
-  options: { value: string; label: string }[];
+  options: { value: string | null; label: string }[];
   placeholder: string;
 }
 
@@ -34,7 +34,7 @@ export function SelectOption({
         <SelectGroup>
           <SelectLabel>{label}</SelectLabel>
           {options.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
+            <SelectItem key={item.value} value={item.value ?? ""}>
               {item.label}
             </SelectItem>
           ))}

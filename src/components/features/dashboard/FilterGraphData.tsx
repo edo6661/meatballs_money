@@ -9,7 +9,7 @@ const FilterGraphData = () => {
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  function handleSearch(term: FilterByDate) {
+  function handleFilter(term: FilterByDate) {
     const params = new URLSearchParams(searchParams);
     if (term) {
       params.set('filter', term);
@@ -25,7 +25,7 @@ const FilterGraphData = () => {
         filter={
           searchParams.get('filter') as FilterByDate || filterByDateDefaultValue
         }
-        onChangeFilter={(val) => handleSearch(val)}
+        onChangeFilter={(val) => handleFilter(val)}
       />
     </div>
   )

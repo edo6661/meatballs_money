@@ -8,6 +8,7 @@ import {
   PlainTransaction,
   ProfitLossGrouped,
   TransactionFrequencyGrouped,
+  TransactionTypeWithAll,
 } from "@/types/transaction_type";
 import { Prisma, Transaction, TransactionType } from "@prisma/client";
 import { Session } from "next-auth";
@@ -112,7 +113,7 @@ export const getTransactionsInfiniteScrollAndFilter = async (
   take: number = 12,
   page: number = 1,
   filter: FilterByDate,
-  type: TransactionType | null
+  type: TransactionTypeWithAll
 ): Promise<PaginationResponse<Transaction>> => {
   try {
     const session = await avoidUserNull();
@@ -144,10 +145,12 @@ export const getTransactionsInfiniteScrollAndFilter = async (
         break;
     }
 
+    const actualType = type === "ALL" ? null : type;
+
     // 2. Bangun where clause
     const whereClause: Prisma.TransactionWhereInput = {
       userId: session.user.id,
-      ...(type && { type }),
+      ...(actualType && { type: actualType }),
     };
 
     if (filter !== FilterByDate.ALL) {
@@ -193,6 +196,7 @@ export const getTransactionsInfiniteScrollAndFilter = async (
       error: null,
     };
   } catch (e) {
+    console.log("error", e);
     return {
       success: false,
       message: "Gagal memuat transaksi",

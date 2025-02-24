@@ -1,3 +1,4 @@
+"use client"
 import {
   Pagination,
   PaginationContent,
@@ -7,6 +8,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type PaginationTransactionProps = {
   totalPage: number;
@@ -58,19 +60,39 @@ export default function PaginationTransaction({
     return pages;
   };
 
-  const pageNumbers = getPageNumbers(currentPage, totalPage);
+  const disabledStlye = (isDisabled: boolean) => {
+    return isDisabled ? "cursor-not-allowed" : "cursor-pointer";
+  }
 
+
+
+  const pageNumbers = getPageNumbers(currentPage, totalPage);
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+
+  function handlePage(page: string) {
+    const params = new URLSearchParams(searchParams);
+    if (page) {
+      params.set("page", page);
+    } else {
+      params.delete("page");
+    }
+    replace(`${pathname}?${params.toString()}`);
+  }
   return (
     <Pagination>
       <PaginationContent>
         <PaginationItem>
-          {hasPrevPage ? (
-            <PaginationPrevious href={`?page=${currentPage - 1}`} />
-          ) : (
-            <PaginationPrevious href="#"
+          <PaginationPrevious
+            className={`${disabledStlye(!hasPrevPage)}`}
+            onClick={() => {
+              if (hasPrevPage) {
+                handlePage(String(currentPage - 1));
+              }
 
-            />
-          )}
+            }}
+          />
         </PaginationItem>
 
         {pageNumbers.map((item, index) => {
@@ -84,8 +106,9 @@ export default function PaginationTransaction({
             return (
               <PaginationItem key={`page-${item}`}>
                 <PaginationLink
-                  href={`?page=${item}`}
+                  onClick={() => handlePage(String(item))}
                   isActive={item === currentPage}
+                  className={`${disabledStlye(item === currentPage)}`}
                 >
                   {item}
                 </PaginationLink>
@@ -95,11 +118,15 @@ export default function PaginationTransaction({
         })}
 
         <PaginationItem>
-          {hasNextPage ? (
-            <PaginationNext href={`?page=${currentPage + 1}`} />
-          ) : (
-            <PaginationNext href="#" disabled />
-          )}
+          <PaginationNext
+            className={`${disabledStlye(!hasNextPage)}`}
+            onClick={() => {
+              if (hasNextPage) {
+                handlePage(String(currentPage + 1));
+              }
+            }}
+
+          />
         </PaginationItem>
       </PaginationContent>
     </Pagination>

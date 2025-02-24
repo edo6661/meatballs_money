@@ -7,7 +7,7 @@ import { formatRupiah } from "@/utils/format_currency";
 import { Transaction, TransactionType } from '@prisma/client';
 
 
-const TransactionItem = (
+const TransactionGridItem = (
   {
     amount,
     category,
@@ -88,4 +88,4 @@ const TransactionItem = (
   )
 }
 
-export default TransactionItem
+export default TransactionGridItem

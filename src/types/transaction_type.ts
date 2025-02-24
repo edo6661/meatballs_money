@@ -45,7 +45,44 @@ export const filterByDateOptions = [
   { value: FilterByDate.WEEK, label: "This Week" },
   { value: FilterByDate.MONTH, label: "This Month" },
   { value: FilterByDate.YEAR, label: "This Year" },
-  { value: FilterByDate.ALL, label: "All" },
+  { value: FilterByDate.ALL, label: "All Time" },
+];
+
+export enum TransactionTypeWithAll {
+  INCOME = "INCOME",
+  EXPENSE = "EXPENSE",
+  ALL = "ALL",
+}
+
+export const filterByTransactionTypeOptions = [
+  {
+    value: TransactionTypeWithAll.INCOME,
+    label: "Income",
+  },
+  {
+    value: TransactionTypeWithAll.EXPENSE,
+    label: "Expense",
+  },
+  {
+    value: TransactionTypeWithAll.ALL,
+    label: "All Transaction Type",
+  },
+];
+
+export enum TransactionView {
+  TABLE = "TABLE",
+  GRID = "GRID",
+}
+
+export const transactionViewOptions = [
+  {
+    value: TransactionView.TABLE,
+    label: "Table",
+  },
+  {
+    value: TransactionView.GRID,
+    label: "Grid",
+  },
 ];
 
 export const filterByDateDefaultValue: FilterByDate = FilterByDate.ALL;
@@ -78,8 +115,13 @@ export const isValidFilter = (value: string): value is FilterByDate =>
   Object.values(FilterByDate).includes(value as FilterByDate);
 
 export const isValidTransactionType = (
-  value: string | null
-): value is TransactionType => {
+  value: string
+): value is TransactionTypeWithAll => {
   if (!value) return true;
-  return Object.values(TransactionType).includes(value as TransactionType);
+  return Object.values(TransactionTypeWithAll).includes(
+    value as TransactionTypeWithAll
+  );
 };
+
+export const isValidViewType = (value: string) =>
+  Object.values(TransactionView).includes(value as TransactionView);

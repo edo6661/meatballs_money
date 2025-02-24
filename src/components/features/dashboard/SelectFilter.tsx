@@ -24,7 +24,7 @@ export function SelectFilter({ filter, onChangeFilter }: SelectFilterProps) {
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Filter</SelectLabel>
+          <SelectLabel>Filter Date</SelectLabel>
           {filterByDateOptions.map((item) => (
             <SelectItem key={item.value} value={item.value}>
               {item.label}
