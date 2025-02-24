@@ -1,7 +1,9 @@
 import Transactions from '@/components/features/transaction/Transactions'
 import ValidationErrorSearchParams from '@/components/features/transaction/ValidationErrorSearchParams';
+import { SHARED, TRANSACTION_PAGE } from '@/constants/il8n';
 import { FilterByDate, isValidFilter, isValidTransactionType, isValidViewType, TransactionTypeWithAll, TransactionView } from '@/types/transaction_type';
 import { TransactionType } from '@prisma/client';
+import { getTranslations } from 'next-intl/server';
 import React, { Suspense } from 'react'
 
 const TransactionsPage = async (
@@ -21,12 +23,14 @@ const TransactionsPage = async (
   const filter = searchParams?.filter ? searchParams.filter : FilterByDate.ALL;
   const type = searchParams?.type ? searchParams.type : TransactionTypeWithAll.ALL;
   const view = searchParams?.view ? searchParams.view : TransactionView.GRID;
+  const t = await getTranslations(TRANSACTION_PAGE);
+  const s = await getTranslations(SHARED);
 
 
   if (!isValidFilter(filter)) {
     return (
       <ValidationErrorSearchParams
-        errorLabel="Filter"
+        errorLabel={t("filter")}
         allowedValues={Object.values(FilterByDate)}
       />
     );
@@ -35,7 +39,7 @@ const TransactionsPage = async (
   if (!isValidTransactionType(type)) {
     return (
       <ValidationErrorSearchParams
-        errorLabel="Transaction type"
+        errorLabel={`${s("transaction")} ${s("type")}`}
         allowedValues={Object.values(TransactionType)}
       />
     );
@@ -44,7 +48,7 @@ const TransactionsPage = async (
   if (!isValidViewType(view)) {
     return (
       <ValidationErrorSearchParams
-        errorLabel="View type"
+        errorLabel={`${s("transaction")} ${s("view")}`}
         allowedValues={Object.values(TransactionView)}
       />
     );

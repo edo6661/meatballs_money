@@ -11,5 +11,6 @@ export const TRANSACTION_PAGE = "TransactionPage";
 export const TRANSACTION_VALIDATION = `${TRANSACTION_PAGE}.validation`;
 export const TRANSACTION_FIELDS = `${TRANSACTION_PAGE}.fields`;
 export const TRANSACTION_ACTION = `${TRANSACTION_PAGE}.action`;
+
 // ! SHARED
 export const SHARED = "Shared";

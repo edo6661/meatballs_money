@@ -49,7 +49,12 @@
       "income": "Income",
       "expense": "Expense",
       "submit": "Submit"
-    }
+    },
+    "filter": "Filter",
+    "type": "Type",
+    "view": "View",
+    "invalidFilter": "Invalid filter",
+    "allowedValue": "Values that are allowed"
   },
   "AuthPage": {
     "register": {

@@ -48,7 +48,12 @@
       "income": "Pemasukan",
       "expense": "Pengeluaran",
       "submit": "Kirim"
-    }
+    },
+    "filter": "Filter",
+    "type": "Tipe",
+    "view": "Lihat",
+    "invalidFilter": "Filter tidak valid",
+    "allowedValue": "Nilai yang diizinkan: "
   },
   "AuthPage": {
     "register": {
