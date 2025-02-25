@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Pathnames, useRouter } from '@/i18n/routing'
 import { deleteTransaction } from '@/server/actions/transaction_action'
 import { Pencil, Trash } from 'lucide-react'
-import React, { useTransition } from 'react'
+import React, { useState, useTransition } from 'react'
 
 const BtnActionTransaction = ({
   id,
@@ -14,6 +14,7 @@ const BtnActionTransaction = ({
 }) => {
   const router = useRouter()
   const [isPending, startTransition] = useTransition();
+  const [isOpen, setIsOpen] = useState(false);
   const handleDelete = () => {
     startTransition(async () => {
       await deleteTransaction(id);
@@ -23,6 +24,7 @@ const BtnActionTransaction = ({
 
   return (
     <div className='flex flex-wrap items-center justify-center gap-2'>
+
       {!isTable && <>
         <Button
           onClick={() => {
@@ -36,8 +38,8 @@ const BtnActionTransaction = ({
           Edit
         </Button>
         <Button
-          onClick={handleDelete}
-          disabled={isPending}
+          onClick={() => setIsOpen(true)}
+          disabled={isPending || isOpen}
           variant="destructive"
         >
           Delete
