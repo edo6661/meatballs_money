@@ -27,11 +27,14 @@ const TransactionTableItem = async ({ transactions }: { transactions: Transactio
   };
 
   return (
-    <Table>
-      <TableCaption>{t("listTransactions")}</TableCaption>
+    <Table
+    >
+      <TableCaption className='mb-8'>{t("listTransactions")}</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead>{t("date")}</TableHead>
+          <TableHead
+            className='min-w-28'
+          >{t("date")}</TableHead>
           <TableHead>{t("type")}</TableHead>
           <TableHead>{t("category")}</TableHead>
           <TableHead>{t("descriptions")}</TableHead>
@@ -42,7 +45,8 @@ const TransactionTableItem = async ({ transactions }: { transactions: Transactio
       <TableBody>
         {transactions.map((transaction) => (
           <TableRow key={transaction.id}>
-            <TableCell className="font-medium">
+            <TableCell className="font-medium min-w-28"
+            >
               {format(new Date(transaction.transactionDate), "dd MMM yyyy")}
             </TableCell>
             <TableCell>
@@ -69,7 +73,6 @@ const TransactionTableItem = async ({ transactions }: { transactions: Transactio
         ))}
       </TableBody>
       <TableFooter>
-        {/* Jika diperlukan, tambahkan footer */}
       </TableFooter>
     </Table>
   );

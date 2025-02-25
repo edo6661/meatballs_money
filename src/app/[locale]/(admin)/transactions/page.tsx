@@ -1,5 +1,6 @@
 import Transactions from '@/components/features/transaction/Transactions'
 import ValidationErrorSearchParams from '@/components/features/transaction/ValidationErrorSearchParams';
+import { Skeleton } from '@/components/ui/skeleton';
 import { SHARED, TRANSACTION_PAGE } from '@/constants/il8n';
 import { FilterByDate, isValidFilter, isValidTransactionType, isValidViewType, TransactionTypeWithAll, TransactionView } from '@/types/transaction_type';
 import { TransactionType } from '@prisma/client';
@@ -59,7 +60,43 @@ const TransactionsPage = async (
 
   return (
     <div>
-      <Suspense fallback={<div>Loading Transactions...</div>}>
+      <Suspense fallback={
+        <div className='container space-y-12'>
+          <div className='flex items-center gap-4 md:flex-nowrap flex-wrap'>
+            <Skeleton
+              className='w-full h-10'
+            />
+            <Skeleton
+              className='w-full h-10'
+            />
+            <Skeleton
+              className='w-full h-10'
+            />
+          </div>
+          <div className='flex flex-wrap items-stretch gap-8 justify-center'>
+            {view === TransactionView.GRID && (
+              Array.from({ length: 12 }).map((_, i) => (
+                <Skeleton
+                  key={i}
+                  className='w-full max-w-96 h-[275px]' />
+              ))
+            )}
+            <div className='flex flex-col flex-1 gap-2'>
+              {view === TransactionView.TABLE && (
+                Array.from({ length: 13 }).map((_, i) => (
+                  <Skeleton
+                    key={i}
+                    className={`
+                     ${i == 0 ? 'w-full h-10' : 'w-full h-16'}
+                   `} />
+                ))
+              )}
+            </div>
+
+          </div>
+        </div>
+      }>
+
         <Transactions
           page={page}
           take={take}

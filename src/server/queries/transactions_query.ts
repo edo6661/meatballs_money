@@ -185,7 +185,6 @@ export const getTransactionsInfiniteScrollAndFilter = async (
     const hasPrevPage = page > 1;
 
     // console.log("TOTAL PAGE:", totalPage);
-
     return {
       success: true,
       data: transactions,

@@ -38,7 +38,7 @@ const TransactionGridItem = async (
 
   return (
     <Card
-      className={`relative overflow-hidden min-w-96 flex flex-col ${getBorderBasedOnType(type)} `}
+      className={`relative overflow-hidden w-full max-w-96 flex flex-col ${getBorderBasedOnType(type)} `}
     >
 
       <CardHeader>

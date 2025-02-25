@@ -46,7 +46,7 @@ const FilterTransactions = (
   const s = useTranslations(SHARED)
 
   return (
-    <div className='flex items-center gap-8'>
+    <div className='flex items-center gap-4 md:flex-nowrap flex-wrap'>
       <SelectFilter
         filter={
           searchParams.get('filter') as FilterByDate || filter

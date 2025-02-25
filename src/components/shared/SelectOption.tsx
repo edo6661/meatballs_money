@@ -27,7 +27,7 @@ export function SelectOption({
 }: SelectOptionProps) {
   return (
     <Select onValueChange={onValueChange} defaultValue={defaultValue}>
-      <SelectTrigger >
+      <SelectTrigger>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
