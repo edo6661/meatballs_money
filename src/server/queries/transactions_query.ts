@@ -320,6 +320,7 @@ export const getIncomeAndExpenseBasedOnFilter = async (
     const result = Object.values(groupedData).sort(
       (a, b) => a.timestamp!.getTime() - b.timestamp!.getTime()
     );
+    await new Promise((resolve) => setTimeout(resolve, 5000));
 
     return { success: true, data: result };
   } catch (e) {
@@ -447,6 +448,7 @@ export const getProfitAndLossBasedOnFilter = async (
         };
       })
       .sort((a, b) => a.timestamp!.getTime() - b.timestamp!.getTime());
+    await new Promise((resolve) => setTimeout(resolve, 5000));
 
     return { success: true, data: result };
   } catch (e) {
@@ -565,6 +567,7 @@ export const getTransactionFrequencyBasedOnFilter = async (
     const result: TransactionFrequencyGrouped[] = Object.values(
       groupedData
     ).sort((a, b) => a.timestamp!.getTime() - b.timestamp!.getTime());
+    await new Promise((resolve) => setTimeout(resolve, 5000));
 
     return { success: true, data: result };
   } catch (e) {
