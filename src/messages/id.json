@@ -28,7 +28,8 @@
       "create": "Buat",
       "edit": "Edit",
       "delete": "Hapus",
-      "cancel": "Batal"
+      "cancel": "Batal",
+      "update": "Perbarui"
     },
     "validation": {
       "amountPositive": "Jumlah harus positif",

@@ -29,7 +29,8 @@
       "create": "Create",
       "edit": "Edit",
       "delete": "Delete",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "update": "Update"
     },
     "validation": {
       "amountPositive": "Amount must be positive",

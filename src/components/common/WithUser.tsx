@@ -2,6 +2,7 @@ import { redirect } from '@/i18n/routing';
 import { auth } from '@/lib/auth';
 import { User } from '@prisma/client';
 import React, { Suspense } from 'react';
+import TemporaryLoading from '../shared/TemporaryLoading';
 
 interface WithUserProps {
   children: (user: User) => React.ReactNode;
@@ -21,7 +22,9 @@ const WithUser = async ({ children, fallback }: WithUserProps) => {
 
   return <>
     <Suspense fallback={
-      fallback || <div>Loading Default Fallback...</div>
+      fallback || <TemporaryLoading
+        text="Loading user ..."
+      />
     }
 
     >

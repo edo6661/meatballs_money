@@ -6,6 +6,14 @@ import { FilterByDate, isValidFilter, isValidTransactionType, isValidViewType, T
 import { TransactionType } from '@prisma/client';
 import { getTranslations } from 'next-intl/server';
 import React, { Suspense } from 'react'
+import { Metadata } from 'next';
+
+
+export const metadata: Metadata = {
+  title: 'Transactions',
+  description: 'Transactions',
+}
+
 
 const TransactionsPage = async (
   props: {

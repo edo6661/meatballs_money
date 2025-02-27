@@ -2,6 +2,7 @@ import WithUser from '@/components/common/WithUser'
 import React from 'react'
 import FormUpsertTransaction from './FormUpsertTransaction'
 import { getTransactionById } from '@/server/queries/transactions_query'
+import TemporaryLoading from '@/components/shared/TemporaryLoading'
 
 const Transaction = async (
   { transactionId }: { transactionId: string }
@@ -17,7 +18,9 @@ const Transaction = async (
 
   return (
     <WithUser
-      fallback={<div>Loading form update transaction...</div>}
+      fallback={<TemporaryLoading
+        text="Temporary loading form update transaction ..."
+      />}
     >
       {(user) => (
         <FormUpsertTransaction user={user} transaction={result.data!} />

@@ -4,7 +4,14 @@ import WrapperMultipleLineChart from '@/components/features/dashboard/WrapperMul
 import WrapperStackedAreaChart from '@/components/features/dashboard/WrapperStackedAreaChart'
 import { Skeleton } from '@/components/ui/skeleton';
 import { FilterByDate } from '@/types/transaction_type';
+import { Metadata } from 'next';
 import React, { Suspense } from 'react'
+
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+  description: 'Admin Dashboard',
+}
 
 export default async function AdminDashboard(props: {
   searchParams?: Promise<{
