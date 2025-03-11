@@ -1,5 +1,4 @@
 "use client"
-import { Button } from '@/components/ui/button'
 import { Pathnames, useRouter } from '@/i18n/routing'
 import { deleteTransaction } from '@/server/actions/transaction_action'
 import { Pencil, Trash } from 'lucide-react'
@@ -35,75 +34,92 @@ const BtnActionTransaction = ({
   };
 
   return (
-    <div className='flex flex-wrap items-center justify-center gap-2'>
-      <AlertDialog
-        onOpenChange={setIsOpen}
-        open={isOpen}
-        defaultOpen={isOpen}
+    <div className='flex flex-wrap items-center gap-2'>
 
-      >
-        <AlertDialogTrigger>Open</AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your account
-              and remove your data from our servers.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDelete}
-
-            >Continue</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
 
 
 
       {!isTable && <>
-        <Button
+        <div
           onClick={() => {
             router.push({
               pathname: '/transactions/[transactionId]' as Pathnames,
               params: { transactionId: id }
             })
           }}
-          disabled={isPending}
+          className={`mr -4 ${isPending ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+
         >
-          Edit
-        </Button>
-        <Button
-          onClick={() => setIsOpen(true)}
-          disabled={isPending || isOpen}
-          variant="destructive"
+          <Pencil />
+        </div>
+        <AlertDialog
+          onOpenChange={setIsOpen}
+          open={isOpen}
+          defaultOpen={isOpen}
+
         >
-          Delete
-        </Button>
+          <AlertDialogTrigger>
+            <Trash />
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete your account
+                and remove your data from our servers.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleDelete}
+
+              >Continue</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </>}
 
       {isTable && (
         <>
-          <Button
+          <div
             onClick={() => {
               router.push({
                 pathname: '/transactions/[transactionId]' as Pathnames,
                 params: { transactionId: id }
               })
             }}
-            disabled={isPending}
+            className={`mr -4 ${isPending ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+
           >
             <Pencil />
-          </Button>
-          <Button
-            onClick={handleDelete}
-            disabled={isPending}
-            variant="destructive"
+          </div>
+          <AlertDialog
+            onOpenChange={setIsOpen}
+            open={isOpen}
+            defaultOpen={isOpen}
+
           >
-            <Trash />
-          </Button>
+            <AlertDialogTrigger>
+              <Trash />
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete your account
+                  and remove your data from our servers.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDelete}
+
+                >Continue</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </>
       )}
     </div>
